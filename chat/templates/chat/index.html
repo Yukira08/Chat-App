@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<!-- chat/templates/chat/index.html -->
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <title>Chat Rooms</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    What chat room would you like to enter?<br/>
-    <input id="room-name-input" type="text" size="100"/><br/>
-    <input id="room-name-submit" type="button" value="Enter"/>
-
-    <script>
-        document.querySelector('#room-name-input').focus();
-        document.querySelector('#room-name-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#room-name-submit').click();
-            }
-        };
-
-        document.querySelector('#room-name-submit').onclick = function(e) {
-            var roomName = document.querySelector('#room-name-input').value;
-            window.location.pathname = '/chat/' + roomName + '/';
-        };
-    </script>
+    <div class="row">
+        <div class="column bar">
+            <i class="fas fa-user fa-2x"></i>
+            <i class="fas fa-comment-dots fa-2x"></i>
+            <i class="fas fa-address-book fa-2x"></i>
+            <i class="fas fa-user-plus fa-2x"></i>
+        </div>
+        <div class="column middle">
+            <input type="text" class="search-bar" placeholder="Search"> 
+            <button type="submit"><i class="fa fa-search"></i></button>
+            <p>Available Chats</p>
+        </div>
+        <div class="column right">
+            <p>Chatboxes</p>
+        </div>
+    </div>
 </body>
 </html>
