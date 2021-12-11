@@ -1,9 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-def home(request):
-    return render(request, 'authtest/home.html')
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -18,3 +12,6 @@ def private_page(request):
 
 def public_page(request):
     return render(request, 'authtest/public.html', {})
+
+def signup(request):
+    return render(request, 'accounts/signup.html')
