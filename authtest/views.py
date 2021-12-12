@@ -1,9 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-def home(request):
-    return render(request, 'authtest/home.html')
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required

@@ -1,0 +1,12 @@
+<html lang="ja"><head><meta charset="utf-8"></head>
+  <body>
+    <h1>Sign Up</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Sign Up</button>
+  </form>
+    <p><a href="{% url 'home' %}">home</a></p>
+  </body>
+</html>
