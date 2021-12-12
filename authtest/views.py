@@ -12,6 +12,3 @@ def private_page(request):
 
 def public_page(request):
     return render(request, 'authtest/public.html', {})
-
-def signup(request):
-    return render(request, 'accounts/signup.html')
