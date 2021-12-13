@@ -1,12 +1,24 @@
-<html lang="ja"><head><meta charset="utf-8"></head>
-  <body>
-    <h1>Sign Up</h1>
-
-<form method="post">
+{%extends 'base.html'%}
+{% load static%}
+{% load crispy_forms_tags%}
+{% block content%} 
+  <h1>Sign Up</h1>
+  <form method="post" class="mx-1 mx-md-4">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
+    {{ form | crispy }}
+    <br>
+    <div class="form-check justify-content-center mb-5">
+      <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c"/>
+        <label class="form-check-label" for="form2Example3">I agree all statements in <a href="#!">Terms of service</a></label>
+      </div>
+      
+      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+      <button type="button" class="btn btn-success btn-lg">Register</button>
+      </div> 
+      Already Have An Account? &nbsp<a href="{%url 'login'%}" style="text-decoration: none;">LogIn</a>
   </form>
-    <p><a href="{% url 'home' %}">home</a></p>
-  </body>
-</html>
+
+
+{% endblock%}
+
+
