@@ -1,5 +1,6 @@
 <!-- base.html -->
 {% load static%}
+{% load bootstrap_icons %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,19 +16,20 @@
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-lg-12 col-xl-11">
           <div class="card text-black" style="border-radius: 25px;">
+            <div>
+              <a href="{%url 'home'%}" style="float: right; padding: 10px 15px;">{% bs_icon 'house-fill' size='2em' color='black' %}</a>
+            </div>    
             <div class="card-body p-md-5">
               <div class="row justify-content-center">
                 <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-                  <h1 class="fw-bold mb-5 mx-1 mx-md-4 mt-4"></h1>
                     <form class="mx-1 mx-md-4">
                       {%block content%}
                       {%endblock%}
                     </form>
                 </div>
-                {% block img%}
-                {%endblock%}
-                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">   
+                <div class="col-md-10 col-lg-6 col-xl-7 d-flex order-1 order-lg-2">   
                   <img src="{% static 'img/welcome.svg'%}" class="img-fluid" alt="Sample image">
+                  
                 </div>
               </div>
             </div>
