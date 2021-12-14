@@ -7,8 +7,9 @@
     height: 100vw;
 }
 .bar{
-    width: 8%;
-    background-color: #2d767f;
+    width: 5%;
+    /* background-color: #2d767f; */
+    background-color: #00BFA6;
 }
 .bar i{
     display: block;
@@ -22,7 +23,7 @@
     background-color: #e4fcf9;
     height: 100;
     margin-top: 0;
-    width: 37%;
+    width: 40%;
     padding-left: 15px;
 }
 .right{
