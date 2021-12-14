@@ -18,13 +18,13 @@ def signup(request):
         form = CustomUserCreationForm()
     return render(request,'accounts/signup.html',{'form':form})
 
-# def profile(request,username):
-#     data={}
-#     if request.user == username:
-#         data['option']= False
-#     else:
-#         data['option']= True
-#     inst=User.objects.get(username=username)
-#     data['username']=inst.username
-#     data['email']=inst.email
-#     return render(request,'accounts/profile.html',data)
+def profile(request,username):
+    data={}
+    if request.user.username == username:
+        data['option']= False
+    else:
+        data['option']= True
+    inst=User.objects.get(username=username)
+    data['username']=inst.username
+    data['email']=inst.email
+    return render(request,'accounts/profile.html',data)
