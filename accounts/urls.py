@@ -4,4 +4,5 @@ from authtest.views import home
 urlpatterns = [
     path('', include("django.contrib.auth.urls")),
     path('signup', views.signup, name='signup'),
+    path('<str:username>',views.profile,name='profile'),
 ]
