@@ -11,11 +11,23 @@
         <div class="media">
           <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
           <div class="media-body">
-            <h2 class="account-heading">{{ username }}</h2>
-            <p class="text-secondary">{{ email }}</p>
+            <h2 class="account-heading">{{ user.username }}</h2>
+            <p class="text-secondary">{{ user.email }}</p>
+            
             {% if option%}
-            <p>Add friend</p>
+            <a href="{% url 'add_friend' friendname=user.username %}">addfriend</a>
             {% endif %}
+
+            {% if friendnames %}
+            <ul>
+              {% for friendname in friendnames %}
+            <li><a href="{% url 'profile' username=friendname %}">{{ friendname }}</a></li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p> No friends</p>
+            {% endif %}
+          
           </div>
         </div>
         <!-- FORM HERE -->

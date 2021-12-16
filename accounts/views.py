@@ -20,11 +20,29 @@ def signup(request):
 
 def profile(request,username):
     data={}
-    if request.user.username == username:
+    friendnames = []
+    inst=User.objects.get(username=username)
+    data['user']=inst
+    Friendship.objects.filter(friends=inst)
+
+    for i in Friendship.objects.filter(friends=inst):
+        friendnames.append(i.cur_user.username)
+
+    data['friendnames'] = friendnames
+
+    if request.user==inst:
         data['option']= False
     else:
-        data['option']= True
-    inst=User.objects.get(username=username)
-    data['username']=inst.username
-    data['email']=inst.email
+        if request.user.username in friendnames:
+            data['option'] = False
+        else:
+            data['option']= True
+
     return render(request,'accounts/profile.html',data)
+
+def add_friend(request, friendname):
+    inst=User.objects.get(username=friendname)
+    Friendship.make_friend(request.user, inst)
+    Friendship.make_friend(inst, request.user)
+
+    return profile(request, friendname)
