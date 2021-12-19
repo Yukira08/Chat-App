@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/iniad/2021_fall/socket/socketchat/venv"
+VIRTUAL_ENV="/mnt/f/toyo/year_2/fall/INIAD_EngineeringExercise_IIB/teamproject2021/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

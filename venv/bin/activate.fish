@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/iniad/2021_fall/socket/socketchat/venv"
+set -gx VIRTUAL_ENV "/mnt/f/toyo/year_2/fall/INIAD_EngineeringExercise_IIB/teamproject2021/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
