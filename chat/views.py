@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils.safestring import mark_safe
 from .models import Room, message
 from accounts.models import User, Friendship
@@ -15,9 +15,11 @@ def room(request, room_name):
     except:
         a=Room.objects.create(name=room_name)
         a.save()
+
+    # a= get_object_or_404(Room,name=room_name)
     if request.user not in a.participants.all():
         a.participants.add(request.user)
         a.save()
     return render(request, 'chat/room.html', {
-        'room_name_json': mark_safe(json.dumps(room_name))
+        'room_name_json': mark_safe(json.dumps(room_name)),
     })

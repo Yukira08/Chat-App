@@ -9,12 +9,12 @@ from django.conf import settings
 
 
 class Room(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     participants=models.ManyToManyField(to=settings.AUTH_USER_MODEL)
 
 
-class message(models.Model):
+class message(models.Model): #Change to Message
     idmessage=models.IntegerField(primary_key=True)
     sender=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     date=models.DateTimeField(auto_now=True)
