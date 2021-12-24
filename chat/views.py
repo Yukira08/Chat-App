@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils.safestring import mark_safe
-from .models import Room, message
+from .models import Room, Message
 from accounts.models import User, Friendship
 import json
 from django.contrib.auth.decorators import login_required
