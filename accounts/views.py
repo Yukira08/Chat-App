@@ -5,6 +5,8 @@ from authtest.views import home
 from accounts.models import User, Friendship
 # Create your views here.
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     return render(request, 'accounts/login.html')
 
 def signup(request):
@@ -17,23 +19,23 @@ def signup(request):
     else:
         form = CustomUserCreationForm()
     return render(request,'accounts/signup.html',{'form':form})
-
-def profile(request,username):
-    data={}
+def friendlist(username):
     friendnames = []
     inst=User.objects.get(username=username)
-    data['user']=inst
-    Friendship.objects.filter(friends=inst)
-
-    for i in Friendship.objects.filter(friends=inst):
+    fr=Friendship.objects.filter(friends=inst)
+    for i in fr:
         friendnames.append(i.cur_user.username)
-
-    data['friendnames'] = friendnames
+    return friendnames
+def profile(request,username):
+    data={}
+    inst=User.objects.get(username=username)
+    data['user']=inst
+    data['friendnames'] = friendlist(username)
 
     if request.user==inst:
         data['option']= False
     else:
-        if request.user.username in friendnames:
+        if request.user.username in data['friendnames']:
             data['option'] = False
         else:
             data['option']= True
