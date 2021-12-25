@@ -20,6 +20,15 @@ def room(request, room_name):
     if request.user not in a.participants.all():
         a.participants.add(request.user)
         a.save()
+    
+    messages = ""
+
+    for message in Message.objects.filter(room = a):
+        messages += message.sender.username + ': ' + message.message + '\n'
+    
+
     return render(request, 'chat/room.html', {
         'room_name_json': mark_safe(json.dumps(room_name)),
+        'room_id' : mark_safe(json.dumps(a.id)),
+        'messages' : mark_safe(json.dumps(messages))
     })

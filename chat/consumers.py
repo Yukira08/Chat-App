@@ -1,7 +1,7 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
-from .models import Message,Room
+from .models import Message, Room
 import json
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -24,21 +24,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data): #when sending message
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        user=self.scope['user']
-        await self.save_message(message)
+        room_id = text_data_json['room_id']
+        user= self.scope['user']
+        await self.save_message(message, room_id)
         # Send message to room group
+        # await self.channel_layer.group_send(
+        #     self.room_group_name,
+        #     { 'type': 'chat_message', 'message': user.username+":"+message}
+        # )    
         await self.channel_layer.group_send(
             self.room_group_name,
-            { 'type': 'chat_message', 'message': user.username+":"+message}
+            { 'type': 'chat_message', 'message' : user.username + ': ' + message   + '\n'}
         )    
+
     @database_sync_to_async
-    def save_message(self,message):
-        a=Message.objects.create(sender=self.scope['user'],message=message)
+    def save_message(self,message,room_id):
+        room = Room.objects.get(id=room_id)
+
+        a=Message.objects.create(sender=self.scope['user'],room = room, message=message)
         a.save()
+
+        a = Message.objects.filter(sender=self.scope['user'],room = room, message = message).last()
+        a.delete()
+
     # Receive message from room group
     async def chat_message(self, event): #when receiving (including the sender) # self = receiver
         message = event['message']
-        # a=Message.objects.create(sender=self.scope['user'],message=message)
-        # a.save()
         # Send message to WebSocket
         await self.send(text_data=json.dumps({'message': message}))
