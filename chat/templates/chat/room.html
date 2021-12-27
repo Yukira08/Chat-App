@@ -16,7 +16,7 @@
     document.querySelector('#chat-log').value = (messages);
 
     var chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onmessage = function(e) {    
         var data = JSON.parse(e.data); var message = data['message'];
         console.log(data);

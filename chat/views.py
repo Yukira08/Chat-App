@@ -14,9 +14,9 @@ def error(request):
 
 
 @login_required
-def room(request, room_name):
+def room(request, room_id):
     try:
-        a=Room.objects.get(name=room_name)
+        a=Room.objects.get(id=room_id)
         #print(a.id)
     except:
         return redirect(error)
@@ -42,8 +42,8 @@ def room(request, room_name):
     
 
     return render(request, 'chat/room.html', {
-        'room_name_json': mark_safe(json.dumps(room_name)),
-        'room_id' : mark_safe(json.dumps(a.id)),
+        'room_name_json': mark_safe(json.dumps(a.name)),
+        'room_id' : mark_safe(json.dumps(room_id)),
         'messages' : mark_safe(json.dumps(messages))
     })
 
@@ -77,7 +77,7 @@ def create_room(request):
             a = User.objects.get(username=friend)
             new_room.participants.add(a)
         new_room.save()
-        return redirect(room, room_name=room_name)
+        return redirect(room, room_id=new_room.id)
 
     return redirect(error)
 
