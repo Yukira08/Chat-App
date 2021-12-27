@@ -15,16 +15,19 @@ def error(request):
 
 @login_required
 def room(request, room_name):
-    print('why don you printing')
     try:
         a=Room.objects.get(name=room_name)
+        #print(a.id)
     except:
         return redirect(error)
-    #     a=Room.objects.create(name=room_name)
-    #     a.save()
+        # a=Room.objects.create(name=room_name)
+        # a.save()
 
     # a= get_object_or_404(Room,name=room_name)
-    
+    # print(request.user.username)
+    # for b in a.participants.all():
+    #     print(b.username)
+
     if request.user not in a.participants.all():
     #     # a.participants.add(request.user)
     #     # a.save()

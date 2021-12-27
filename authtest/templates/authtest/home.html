@@ -10,7 +10,12 @@
     <p><a href="{% url 'login' %}">login</a></p>
     <p><a href="{% url 'signup' %}">signup</a></p>
     {% endif %}
-    <p><a href="{% url 'index' %}">create chat room</a></p>
+    
+    <!--p><a href="{% url 'index' %}">create chat room</a></p-->
+    
+    <p><a href="{% url 'add_room' %}"> add chat room</a></p>
+
+
     <hr>
     <p><a href="{% url 'priv' %}">priv</a></p>
     <p><a href="{% url 'pub' %}">public</a></p>
