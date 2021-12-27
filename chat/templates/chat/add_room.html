@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- chat/templates/chat/index.html -->
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Add another chatroom</title>
+</head>
+
+<body>
+    <form action="{% url 'create_room' %}" method = "post">
+        {% csrf_token %}
+        <input id="room-name-input" name = "room_name" type="text" size="100"/><br/>
+        
+        {% for counter in friends %}
+        <p> {{ counter }}</p>
+        <input type="checkbox" name="friends" id="{{ counter}}"  value="{{ counter }}"> 
+        {% endfor %}
+
+        <button id="room-name-submit" type="submit">Submit</button>
+    </form>
+
+    <script>
+        
+        
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            var roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+    </script>
+</body>
+</html>
+
