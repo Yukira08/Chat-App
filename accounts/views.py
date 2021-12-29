@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login as log
-from accounts.forms import CustomUserCreationForm
+from accounts.forms import CustomUserCreationForm, ProfileUpdateForm
 from authtest.views import home
 from accounts.models import User, Friendship
+from django.contrib import messages
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
@@ -27,14 +28,25 @@ def friendlist(username):
         friendnames.append(i.cur_user.username)
     return friendnames
 def profile(request,username):
+    if request.method=='POST':
+        img_form=ProfileUpdateForm(request.POST,request.FILES,instance=request.user)
+        if img_form.is_valid():
+            img_form.save()
+            messages.success(request,'Profile picture updated')
+            return redirect('profile',username=request.user.username)
+    else:
+        img_form=ProfileUpdateForm(instance=request.user)
     data={}
     inst=User.objects.get(username=username)
     data['user']=inst
     data['friendnames'] = friendlist(username)
+    data['img_form']=img_form
 
     if request.user==inst:
         data['option']= False
+        data['per']=True
     else:
+        data['per']=False
         if request.user.username in data['friendnames']:
             data['option'] = False
         else:
