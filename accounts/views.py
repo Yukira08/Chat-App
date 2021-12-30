@@ -25,13 +25,15 @@ def profile(request,username):
     inst=User.objects.get(username=username)
     data['user']=inst
     Friendship.objects.filter(friends=inst)
+    data['offline_time'] = inst.offline_time
 
     if inst.online_status > 0:
         data['online'] = True
+        #print( inst.online_status)
     else:
         data['online'] = False
 
-    print(data['online'])
+    #print(data['online'])
     for i in Friendship.objects.filter(friends=inst):
         friendnames.append(i.cur_user.username)
 

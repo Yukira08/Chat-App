@@ -3,7 +3,7 @@ from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
 from .models import Message, Room
 from accounts.models import User
-
+from datetime import datetime
 import json
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -68,6 +68,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def offline_update(self):
         user = User.objects.get(id = self.scope['user'].id)
         user.online_status -= 1
+        user.offline_time = datetime.now()
         user.save()
         #print(self.scope['user'].online_status)
 
