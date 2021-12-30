@@ -14,6 +14,12 @@
             <h2 class="account-heading">{{ user.username }}</h2>
             <p class="text-secondary">{{ user.email }}</p>
             
+            {% if online %}
+            <p> ONLINE </p>
+            {% else %}
+            <p> OFFLINE </p>
+            {% endif %}
+
             {% if option%}
             <a href="{% url 'add_friend' friendname=user.username %}">addfriend</a>
             {% endif %}

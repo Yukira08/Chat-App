@@ -3,6 +3,7 @@ from django.contrib.auth import login as log
 from accounts.forms import CustomUserCreationForm
 from authtest.views import home
 from accounts.models import User, Friendship
+
 # Create your views here.
 def login(request):
     return render(request, 'accounts/login.html')
@@ -25,6 +26,12 @@ def profile(request,username):
     data['user']=inst
     Friendship.objects.filter(friends=inst)
 
+    if inst.online_status > 0:
+        data['online'] = True
+    else:
+        data['online'] = False
+
+    print(data['online'])
     for i in Friendship.objects.filter(friends=inst):
         friendnames.append(i.cur_user.username)
 

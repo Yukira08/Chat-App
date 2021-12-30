@@ -7,6 +7,7 @@ from datetime import datetime
 
 class User(AbstractUser):
     description = models.CharField(max_length=300)
+    online_status = models.IntegerField(default=0)
 
 class Friendship(models.Model):
     friends=models.ManyToManyField(User,null=True)
