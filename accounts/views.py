@@ -22,6 +22,7 @@ def signup(request):
 def profile(request,username):
     data={}
     friendnames = []
+    friend_number = 0
     inst=User.objects.get(username=username)
     data['user']=inst
     Friendship.objects.filter(friends=inst)
@@ -36,8 +37,10 @@ def profile(request,username):
     #print(data['online'])
     for i in Friendship.objects.filter(friends=inst):
         friendnames.append(i.cur_user.username)
+        friend_number+=1
 
     data['friendnames'] = friendnames
+    data['friend_number'] = friend_number
 
     if request.user==inst:
         data['option']= False

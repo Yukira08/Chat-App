@@ -57,11 +57,6 @@
 </head>
 <body>
   <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
-    {% if option%}
-    <a href="{% url 'add_friend' friendname=user.username %}" class="icon">{% bs_icon person-plus-fill size='2em' color='black'%} Add Friend</a>
-    {%else%}
-    <a href="#" class="icon">{% bs_icon person-check-fill size='2em' color='black'%} Friends</a>
-    {% endif %}
     <div class="card p-4">
         <div class=" image d-flex flex-column justify-content-center align-items-center"> 
           {% if online%}
@@ -78,8 +73,24 @@
           {% endif %}
           <span class="name mt-3">{{user.username}}</span> 
           <span class="idd">{{user.email}}</span>
+          {% if option%}
+          <a href="{% url 'add_friend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} Add Friend</a>
+          {%else%}
+          <a class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} &nbsp;Friends</a>
+          {% endif %}
             <div class="d-flex flex-row justify-content-center align-items-center mt-3"> 
-              <span class="number">1069 <span class="friend">Friends</span></span> 
+              <span class="number">{{ friend_number}} <span class="friend">Friends</span></span> 
+            </div>
+            <div class="scrollmenu">
+              {% if friendnames %}
+              <ul>
+              {% for friendname in friendnames %}
+              <li><a href="{% url 'profile' username=friendname %}">{{ friendname }}</a></li>
+              {% endfor %}
+              </ul>
+              {% else %}
+              <p> No friends</p>
+              {% endif %}
             </div>
         </div>
     </div>
