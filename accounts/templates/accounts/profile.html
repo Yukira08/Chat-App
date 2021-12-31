@@ -43,6 +43,7 @@
 </html> -->
 
 {% load static%}
+{% load bootstrap_icons %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,6 +57,11 @@
 </head>
 <body>
   <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
+    {% if option%}
+    <a href="{% url 'add_friend' friendname=user.username %}" class="icon">{% bs_icon person-plus-fill size='2em' color='black'%} Add Friend</a>
+    {%else%}
+    <a href="#" class="icon">{% bs_icon person-check-fill size='2em' color='black'%} Friends</a>
+    {% endif %}
     <div class="card p-4">
         <div class=" image d-flex flex-column justify-content-center align-items-center"> 
           {% if online%}

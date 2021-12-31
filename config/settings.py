@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'chat',
     'authtest',
     'accounts',
+    'django_bootstrap_icons',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
