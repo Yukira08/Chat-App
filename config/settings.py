@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'chat',
     'authtest',
     'accounts',
+    'emoji_picker',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

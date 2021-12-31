@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.safestring import mark_safe
-from .models import Room, Message
+from .models import Room, Message, YourModelForm
 from accounts.views import friendlist
 from accounts.models import User, Friendship
 import json
@@ -34,13 +34,14 @@ def room(request, room_id):
 
     available_room=Room.objects.filter(participants=request.user)
     # available_room.remove(cur_room)
- 
+    f=YourModelForm()
     return render(request, 'chat/room.html', {
         'room_name_json': mark_safe(json.dumps(a.name)),
         'room_id' : mark_safe(json.dumps(room_id)),
         'messages' : mark_safe(json.dumps(messages)),
         'chat_rooms':available_room,
         'this_room' : room_id,
+        'form': f,
     })
 
 
@@ -76,7 +77,7 @@ def create_room(request):
         return redirect(room, room_id=new_room.id)
 
     return redirect(error)
-    
-    
-    
 
+@login_required
+def sf(request):
+    return render(request,'chat/sf.html')
