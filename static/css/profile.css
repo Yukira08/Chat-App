@@ -1,0 +1,71 @@
+* {
+    margin: 0;
+    padding: 0
+}
+
+body {
+    background-color: #00BFA6;
+}
+
+.card {
+    width: 350px;
+    background-color: #efefef;
+    border: none;
+    cursor: pointer;
+}
+
+
+.name {
+    font-size: 22px;
+    font-weight: bold
+}
+
+.idd {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.number {
+    font-size: 22px;
+    font-weight: bold
+}
+
+.friend {
+    font-size: 12px;
+    font-weight: 500;
+    color: #444444
+}
+
+.text span {
+    font-size: 13px;
+    color: #545454;
+    font-weight: 500
+}
+.img_cont {
+    position: relative;
+    height: 140px;
+    width: 140px;
+  }
+
+  .user_img {
+    height: 140px;
+    width: 140px;
+    border: 1.5px solid black;
+  }
+.active {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.online_icon {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    background-color: #4cd137;
+    border-radius: 50%;
+    bottom: 0.4em;
+    right: 1em;
+    border: 1.5px solid white;
+  }
+  .offline {
+    background-color: #c23616 !important;
+  }
