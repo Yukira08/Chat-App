@@ -28,12 +28,15 @@
 
 </body>
 <script>
+    var room_id = {{ room_id }};
     var roomName = {{ room_name_json }};
     console.log(document.getElementById('id_short_text').value);
     var chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
+        var prevmes = {{messages}};
+        document.querySelector("#chat-log").value+=prevmes;
     }
     chatSocket.onmessage = function(e) {    
         var data = JSON.parse(e.data); var message = data['message'];
@@ -52,7 +55,7 @@
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#id_short_text');
         var message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id}));
+        chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id,'raw': 'none'}));
         messageInputDom.value = '';
     };
 </script>
