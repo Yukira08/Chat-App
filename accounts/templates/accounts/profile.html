@@ -9,11 +9,12 @@
 <body>
     <div class="content-section">
         <div class="media">
-          <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
           <div class="media-body">
+            <img style="width: 300px;" src="{{ user.image.url}}">
             <h2 class="account-heading">{{ user.username }}</h2>
             <p class="text-secondary">{{ user.email }}</p>
             
+<<<<<<< HEAD
             {% if online %}
             <p> ONLINE </p>
             {% else %}
@@ -22,7 +23,17 @@
             {% endif %}
 
             {% if option%}
+=======
+            {% if option %}
+>>>>>>> message-box-management
             <a href="{% url 'add_friend' friendname=user.username %}">addfriend</a>
+            {% endif %}
+            {% if per %}
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ img_form }}
+              <button type="submit">Change</button>
+            </form>
             {% endif %}
 
             {% if friendnames %}

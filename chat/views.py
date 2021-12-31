@@ -1,13 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.safestring import mark_safe
 from .models import Room, Message
+from accounts.views import friendlist
 from accounts.models import User, Friendship
 import json
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def index(request):
-    return render(request, 'chat/index.html', {})
+    return render(request, 'chat/index.html', {'friendnames':friendlist(request.user.username)})
 
 def error(request):
     return render(request, 'chat/error.html', {})
@@ -17,34 +18,28 @@ def error(request):
 def room(request, room_id):
     try:
         a=Room.objects.get(id=room_id)
-        #print(a.id)
     except:
         return redirect(error)
-        # a=Room.objects.create(name=room_name)
-        # a.save()
-
-    # a= get_object_or_404(Room,name=room_name)
-    # print(request.user.username)
-    # for b in a.participants.all():
-    #     print(b.username)
-
     if request.user not in a.participants.all():
-    #     # a.participants.add(request.user)
-    #     # a.save()
         return redirect(error)
     
-
-
     messages = ""
 
     for message in Message.objects.filter(room = a):
         messages += message.sender.username + ': ' + message.message + '\n'
-    
+        a.participants.add(request.user)
+        a.save()
 
+    cur_room = Room.object.get(id=room_id)
+
+    available_room=Room.objects.filter(participants=request.user)
+    available_room.remove(cur_room)
+ 
     return render(request, 'chat/room.html', {
         'room_name_json': mark_safe(json.dumps(a.name)),
         'room_id' : mark_safe(json.dumps(room_id)),
-        'messages' : mark_safe(json.dumps(messages))
+        'messages' : mark_safe(json.dumps(messages)),
+        'chat_rooms':available_room
     })
 
 
@@ -80,4 +75,7 @@ def create_room(request):
         return redirect(room, room_id=new_room.id)
 
     return redirect(error)
+    
+    
+    
 
