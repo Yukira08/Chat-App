@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils.safestring import mark_safe
-from .models import Room, Message
+from .models import Room, Message, YourModelForm
 from accounts.views import friendlist
 from accounts.models import User, Friendship
 import json
@@ -24,7 +24,13 @@ def room(request, room_name):
     available_room=Room.objects.filter(participants=request.user).values('name')
     available_room=[x['name'] for x in available_room]
     available_room.remove(room_name)
+    f=YourModelForm()
     return render(request, 'chat/room.html', {
         'room_name_json': mark_safe(json.dumps(room_name)),
         'chat_rooms':available_room,
+        'form': f,
     })
+
+@login_required
+def sf(request):
+    return render(request,'chat/sf.html')
