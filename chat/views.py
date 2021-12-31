@@ -30,16 +30,17 @@ def room(request, room_id):
         a.participants.add(request.user)
         a.save()
 
-    cur_room = Room.object.get(id=room_id)
+    cur_room = Room.objects.get(id=room_id)
 
     available_room=Room.objects.filter(participants=request.user)
-    available_room.remove(cur_room)
+    # available_room.remove(cur_room)
  
     return render(request, 'chat/room.html', {
         'room_name_json': mark_safe(json.dumps(a.name)),
         'room_id' : mark_safe(json.dumps(room_id)),
         'messages' : mark_safe(json.dumps(messages)),
-        'chat_rooms':available_room
+        'chat_rooms':available_room,
+        'this_room' : room_id,
     })
 
 
