@@ -1,12 +1,15 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login as log
-from accounts.forms import CustomUserCreationForm
+from accounts.forms import CustomUserCreationForm, ProfileUpdateForm
 from authtest.views import home
 from accounts.models import User, Friendship
 
 # Create your views here.
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     return render(request, 'accounts/login.html')
+
 
 def signup(request):
     if request.method == 'POST':
@@ -19,12 +22,22 @@ def signup(request):
         form = CustomUserCreationForm()
     return render(request,'accounts/signup.html',{'form':form})
 
+
 def profile(request,username):
+    if request.method=='POST':
+        img_form=ProfileUpdateForm(request.POST,request.FILES,instance=request.user)
+        if img_form.is_valid():
+            img_form.save()
+            messages.success(request,'Profile picture updated')
+            return redirect('profile',username=request.user.username)
+    else:
+        img_form=ProfileUpdateForm(instance=request.user)
     data={}
     friendnames = []
     friend_number = 0
     inst=User.objects.get(username=username)
     data['user']=inst
+    data['img_form']=img_form
     Friendship.objects.filter(friends=inst)
     data['offline_time'] = inst.offline_time
 
@@ -44,7 +57,9 @@ def profile(request,username):
 
     if request.user==inst:
         data['option']= False
+        data['per']=True
     else:
+        data['per']=False
         if request.user.username in friendnames:
             data['option'] = False
         else:

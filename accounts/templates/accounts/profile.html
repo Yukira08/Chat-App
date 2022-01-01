@@ -59,17 +59,28 @@
   <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
     <div class="card p-4">
         <div class=" image d-flex flex-column justify-content-center align-items-center"> 
+          {% if per%}
+          <div class="img_cont active">
+            <img src="{{user.image.url}}" class="rounded-circle user_img">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              {{ img_form }}
+              <button type="submit">Change</button>
+            </form>
+          </div>
+          {%else%}
           {% if online%}
           <div class="img_cont active">
-            <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+            <img src="{{user.image.url}}" class="rounded-circle user_img">
             <span class="online_icon"></span>
           </div>
           {%else%}
 					<div class="img_cont">
-            <img src="https://i.imgur.com/wvxPV9S.png" class="rounded-circle user_img">
+            <img src="{{user.image.url}}" class="rounded-circle user_img">
             <span class="online_icon offline"></span>
           </div>
           <p>was online at {{ offline_time }}</p>
+          {% endif %}
           {% endif %}
           <span class="name mt-3">{{user.username}}</span> 
           <span class="idd">{{user.email}}</span>
