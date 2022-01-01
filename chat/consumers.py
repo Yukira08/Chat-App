@@ -25,17 +25,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         try:
             message = text_data_json['message']
+            files=''
             await self.save_message(message)
         except:
             message='send file'
-            files = text_data_json['raw']
+            files = text_data_json['bytes']
             print(type(files))
             print(files)
         user=self.scope['user']
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
-            { 'type': 'chat_message', 'message': user.username+":"+message}
+            { 'type': 'chat_message', 'message': user.username+":"+message,'files': files}
         )    
     @database_sync_to_async
     def save_message(self,message):
@@ -44,7 +45,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event): #when receiving (including the sender) # self = receiver
         message = event['message']
+        print(event['files'])
         # a=Message.objects.create(sender=self.scope['user'],message=message)
         # a.save()
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({'message': message}))
+        await self.send(text_data=json.dumps({'message': message,'files': event['files']}))
