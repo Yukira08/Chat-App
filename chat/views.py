@@ -25,12 +25,12 @@ def room(request, room_id):
     
     messages = ""
 
-    for message in Message.objects.filter(room = a):
-        messages += message.sender.username + ': ' + message.message + '\n'
-        a.participants.add(request.user)
-        a.save()
+    # for message in Message.objects.filter(room = a):
+    #     messages += message.sender.username + ': ' + message.message + '\n'
+    #     a.participants.add(request.user)
+    #     a.save()
 
-    cur_room = Room.objects.get(id=room_id)
+    #cur_room = Room.objects.get(id=room_id)
 
     available_room=Room.objects.filter(participants=request.user)
     # available_room.remove(cur_room)
@@ -42,6 +42,7 @@ def room(request, room_id):
         'chat_rooms':available_room,
         'this_room' : room_id,
         'form': f,
+        'messages' : Message.objects.filter(room = a),
     })
 
 

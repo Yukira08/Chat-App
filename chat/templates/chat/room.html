@@ -6,7 +6,7 @@
 </head>
 <body>
     <div>
-        <p>Friendlist</p>
+        <p>Chatroom list</p>
         {% if chat_rooms %}
         <ul>
           {% for chat_room in chat_rooms %}
@@ -20,7 +20,17 @@
         <p> No chat room</p>
         {% endif %}
     </div>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
+    <input id="search-input" type="text" placeholder="Search"/>
+    <button onclick= "window.submitFunction()">Submit</button>
+
+    <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br/> -->
+    
+    <div id="chat-log">
+        {% for message in messages %}
+        <p>{{message.sender.username}} : {{ message.message}} </p>
+        {% endfor %}
+    </div>
+
     {% csrf_token %}
     {{form.media}}
     {{form.short_text}}
@@ -35,13 +45,17 @@
         'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
-        var prevmes = {{messages}};
-        document.querySelector("#chat-log").value+=prevmes;
-    }
+        // var prevmes = {{messages}};
+        // document.querySelector("#chat-log").value+=prevmes;
+    };
+
     chatSocket.onmessage = function(e) {    
         var data = JSON.parse(e.data); var message = data['message'];
-        console.log(data);
-        document.querySelector('#chat-log').value += (message);
+        // console.log(data);
+        // document.querySelector('#chat-log').value += (message);
+        var div = document.getElementById('chat-log');
+        div.innerHTML += message + '\n';
+        
     };
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
@@ -52,11 +66,28 @@
             document.querySelector('#chat-message-submit').click();
         }
     };
+
+    function submitFunction() {
+        var searchInput = document.querySelector("#search-input");
+        var ancestor = document.getElementById('chat-log');
+        var descendents = ancestor.getElementsByTagName('p');
+        for (var i = 0; i < descendents.length; i++){
+            descendents[i].innerHTML = descendents[i].innerHTML.replace(
+                new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
+                '<b style="background-color:#ff0;font-size:100%">$&</b>'
+            );
+        }
+        searchInput.value = '';
+    }
+
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#id_short_text');
         var message = messageInputDom.value;
         chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id,'raw': 'none'}));
         messageInputDom.value = '';
     };
+
+
+
 </script>
 </html>
