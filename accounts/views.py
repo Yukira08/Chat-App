@@ -3,7 +3,7 @@ from django.contrib.auth import login as log
 from accounts.forms import CustomUserCreationForm, ProfileUpdateForm
 from authtest.views import home
 from accounts.models import User, Friendship
-
+from django.contrib import messages
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
@@ -21,9 +21,17 @@ def signup(request):
     else:
         form = CustomUserCreationForm()
     return render(request,'accounts/signup.html',{'form':form})
+def friendlist(username):
+    friendnames = []
+    inst=User.objects.get(username=username)
+    fr=Friendship.objects.filter(friends=inst)
+    for i in fr:
+        friendnames.append(i.cur_user.username)
+    return friendnames
 
 
 def profile(request,username):
+    friendnames = friendlist(request.user.username)
     if request.method=='POST':
         img_form=ProfileUpdateForm(request.POST,request.FILES,instance=request.user)
         if img_form.is_valid():
@@ -53,14 +61,13 @@ def profile(request,username):
         friend_number+=1
 
     data['friendnames'] = friendnames
-    data['friend_number'] = friend_number
-
+    data['img_form']=img_form
     if request.user==inst:
         data['option']= False
         data['per']=True
     else:
         data['per']=False
-        if request.user.username in friendnames:
+        if request.user.username in data['friendnames']:
             data['option'] = False
         else:
             data['option']= True

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- chat/templates/chat/sf.html -->
+<html>
+<head>
+    <meta charset="utf-8"/>  <title>Test send files</title>
+</head>
+<body>
+    <h2>File Upload</h2>
+
+    Select file
+
+    <input type="file" id="filename" />
+
+    <br>
+
+    <input type="button" value="Upload" onclick="sendFile()" />
+</body>
+<script>
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/sf/');
+    chatSocket.binaryType="arraybuffer";
+    chatSocket.onopen = function(){
+        console.log("Connecting...");
+    }
+    chatSocket.onmessage = function(e) {    
+
+        console.log(e.data);
+
+    };
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+    // document.querySelector('#chat-message-input').focus();
+    // document.querySelector('#chat-message-input').onkeyup = function(e) {
+    //     if (e.keyCode === 13) {  // enter, return
+    //         document.querySelector('#chat-message-submit').click();
+    //     }
+    // };
+    // document.querySelector('#chat-message-submit').onclick = function(e) {
+    //     var messageInputDom = document.querySelector('#chat-message-input');
+    //     var message = messageInputDom.value;
+    //     chatSocket.send(JSON.stringify({'message': message}));
+    //     messageInputDom.value = '';
+    // };
+    function sendFile(){
+        var file = document.getElementById('filename').files[0];
+        var reader = new FileReader();
+        var rawData = new ArrayBuffer();            
+        reader.loadend = function() {
+        }
+        reader.onload = function(e) {
+            rawData = e.target.result;
+            console.log(rawData);
+            chatSocket.send(JSON.stringify({'raw':rawData}));
+            alert("the File has been transferred.")
+        }
+        reader.readAsArrayBuffer(file);
+}
+</script>
+</html>

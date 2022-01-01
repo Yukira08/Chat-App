@@ -32,10 +32,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data): #when sending message
         text_data_json = json.loads(text_data)
+        print("text json is    ",text_data_json)
+        # try:
         message = text_data_json['message']
-        room_id = text_data_json['room_id']
-        user= self.scope['user']
-        await self.save_message(message, room_id)
+        roomid = text_data_json['room_id']
+        await self.save_message(message,roomid)
+        # except:
+        #     message='send file'
+        #     files = text_data_json['raw']
+        #     print(type(files))
+        #     print(files)
+        user=self.scope['user']
         # Send message to room group
         # await self.channel_layer.group_send(
         #     self.room_group_name,

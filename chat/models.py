@@ -5,6 +5,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
 from django.conf import settings
 from django.db.models.deletion import CASCADE
+from django import forms
+from emoji_picker.widgets import EmojiPickerTextInput, EmojiPickerTextarea
+
 # from django.contrib.auth.models import User
 # Create your models here.
 
@@ -22,3 +25,10 @@ class Message(models.Model): #Change to Message
     date=models.DateTimeField(auto_now=True)
     message=models.CharField(max_length=1000)
     #path
+
+class YourModelForm(forms.ModelForm):
+    short_text = forms.CharField(widget=EmojiPickerTextInput)
+    long_text = forms.CharField(widget=EmojiPickerTextarea)
+    class Meta:
+        model = Message
+        fields=('message','idmessage')
