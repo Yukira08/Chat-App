@@ -10,8 +10,11 @@
         {% if chat_rooms %}
         <ul>
           {% for chat_room in chat_rooms %}
-        <li><a href="{% url 'room' room_name=chat_room %}">{{ chat_room }}</a></li>
-          {% endfor %}
+          {% if chat_room.id != this_room %}
+        <li><a href="{% url 'room' room_id=chat_room.id %}">{{ chat_room.name }}</a></li>
+        
+        {% endif %}
+        {% endfor %}
         </ul>
         {% else %}
         <p> No chat room</p>
@@ -25,17 +28,20 @@
 
 </body>
 <script>
+    var room_id = {{ room_id }};
     var roomName = {{ room_name_json }};
     console.log(document.getElementById('id_short_text').value);
     var chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
+        var prevmes = {{messages}};
+        document.querySelector("#chat-log").value+=prevmes;
     }
     chatSocket.onmessage = function(e) {    
         var data = JSON.parse(e.data); var message = data['message'];
         console.log(data);
-        document.querySelector('#chat-log').value += (message+'\n');
+        document.querySelector('#chat-log').value += (message);
     };
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
@@ -49,8 +55,7 @@
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#id_short_text');
         var message = messageInputDom.value;
-        console.log(JSON.stringify({'message': message}));
-        chatSocket.send(JSON.stringify({'message': message}));
+        chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id,'raw': 'none'}));
         messageInputDom.value = '';
     };
 </script>

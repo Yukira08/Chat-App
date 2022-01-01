@@ -27,7 +27,9 @@ def friendlist(username):
     for i in fr:
         friendnames.append(i.cur_user.username)
     return friendnames
+
 def profile(request,username):
+    friendnames = friendlist(request.user.username)
     if request.method=='POST':
         img_form=ProfileUpdateForm(request.POST,request.FILES,instance=request.user)
         if img_form.is_valid():
@@ -39,9 +41,21 @@ def profile(request,username):
     data={}
     inst=User.objects.get(username=username)
     data['user']=inst
-    data['friendnames'] = friendlist(username)
-    data['img_form']=img_form
+    Friendship.objects.filter(friends=inst)
+    data['offline_time'] = inst.offline_time
 
+    if inst.online_status > 0:
+        data['online'] = True
+        #print( inst.online_status)
+    else:
+        data['online'] = False
+
+    #print(data['online'])
+    for i in Friendship.objects.filter(friends=inst):
+        friendnames.append(i.cur_user.username)
+
+    data['friendnames'] = friendnames
+    data['img_form']=img_form
     if request.user==inst:
         data['option']= False
         data['per']=True
