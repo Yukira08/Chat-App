@@ -40,10 +40,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         filetype=text_data_json.get("filetype")
         filebin=text_data_json.get("filebin")
         time=datetime.now()
-        print("Input time = ",time.strftime("%Y%m%d%H%M%S%f"))
         await self.save_message(message,room_id,time,filename,filetype,filebin)
-        getpath=str(settings.MEDIA_URL)+'upload/'+str(room_id)+'/'+time.strftime("%Y%m%d%H%M%S%f")+filename
-        print("getpath",getpath)
+        getpath=''
+        if filename!=None:
+            getpath=str(settings.MEDIA_URL)+'upload/'+str(room_id)+'/'+time.strftime("%Y%m%d%H%M%S%f")+filename
         user=self.scope['user']
 
         # Send message to room group  
@@ -54,10 +54,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self,message,room_id,time,name=None,type=None,binn=None):
-        print("On datasave, time given = ",time)
         room = Room.objects.get(id=room_id)
         a=Message.objects.create(sender=self.scope['user'],room = room, date=time,message=message,filename=name)
-        print("In database time (1) = ",a.date.strftime("%Y%m%d%H%M%S%f")) 
         if name!=None:
             location=str(settings.MEDIA_ROOT)+'/upload/'+ str(a.room.id) 
             if not os.path.exists(location):
@@ -69,7 +67,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             f.write(data)
             f.close()
         a.save()
-        print("In database time = ",a.date.strftime("%Y%m%d%H%M%S%f")) 
         a = Message.objects.filter(sender=self.scope['user'],room = room, message = message).last()
         a.delete()
 
@@ -96,7 +93,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         location=event["location"]
         filetype=event["filetype"]
         filename=event["filename"]
-        print(location)
         # a=Message.objects.create(sender=self.scope['user'],message=message)
         # a.save()
         # Send message to WebSocket

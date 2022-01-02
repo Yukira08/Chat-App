@@ -98,7 +98,7 @@
         
         console.log(data);
         if(message!=''){
-        document.querySelector('#chat-log').value += (message);}
+        msging(data);}
         if (data['location']!=''){
             if (data['filetype'].includes('image',0)){
                 imagefile(data);
@@ -140,10 +140,8 @@
             var file = document.getElementById('filename').files[0];
             sendFile(file,message,room_id);
         }
-        else{
-            if(message!=''){
-                chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id}));
-            }
+        if(message!=''){
+            chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id}));
         }
         messageInputDom.value = '';
     };
@@ -159,6 +157,10 @@
             showlink.src=data['location'];
             document.getElementById("test-file").appendChild(showlink);
     }
-
+    function msging(data){
+        var showlink=document.createElement("p");
+            showlink.innerText=(data["usrname"]+" : "+data["message"]);
+            document.getElementById('chat-log').appendChild(showlink);
+    }
 </script>
 </html>
