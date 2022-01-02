@@ -5,6 +5,8 @@ from .models import Message, Room
 from accounts.models import User
 from datetime import datetime
 import json
+from django.conf import settings
+import os
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         
@@ -32,33 +34,42 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
     async def receive(self, text_data): #when sending message
         text_data_json = json.loads(text_data)
-        try:
-            message = text_data_json['message']
-            files=''
-            await self.save_message(message)
-        except:
-            message='send file'
-            files = text_data_json['bytes']
-            print(type(files))
-            print(files)
+        message = text_data_json['message']
+        room_id=text_data_json['room_id']
+        filename=text_data_json.get("filename")
+        filetype=text_data_json.get("filetype")
+        filebin=text_data_json.get("filebin")
+        time=datetime.now()
+        print("Input time = ",time.strftime("%Y%m%d%H%M%S%f"))
+        await self.save_message(message,room_id,time,filename,filetype,filebin)
+        getpath=str(settings.MEDIA_URL)+'upload/'+str(room_id)+'/'+time.strftime("%Y%m%d%H%M%S%f")+filename
+        print("getpath",getpath)
         user=self.scope['user']
-        # Send message to room group
-        # await self.channel_layer.group_send(
-        #     self.room_group_name,
-        #     { 'type': 'chat_message', 'message': user.username+":"+message}
-        # )    
+
+        # Send message to room group  
         await self.channel_layer.group_send(
             self.room_group_name,
-            { 'type': 'chat_message', 'message': user.username+":"+message,'files': files}
+            { 'type': 'chat_message', 'usrname': user.username,'message':message,'location': getpath,'filetype':filetype,'filename':filename}
         )    
 
     @database_sync_to_async
-    def save_message(self,message,room_id):
+    def save_message(self,message,room_id,time,name=None,type=None,binn=None):
+        print("On datasave, time given = ",time)
         room = Room.objects.get(id=room_id)
-
-        a=Message.objects.create(sender=self.scope['user'],room = room, message=message)
+        a=Message.objects.create(sender=self.scope['user'],room = room, date=time,message=message,filename=name)
+        print("In database time (1) = ",a.date.strftime("%Y%m%d%H%M%S%f")) 
+        if name!=None:
+            location=str(settings.MEDIA_ROOT)+'/upload/'+ str(a.room.id) 
+            if not os.path.exists(location):
+                os.makedirs(location)
+            location += '/'+a.date.strftime("%Y%m%d%H%M%S%f")+name
+            a.path=location
+            data=bytes(list(binn.values()))
+            f=open(location,'wb+')
+            f.write(data)
+            f.close()
         a.save()
-
+        print("In database time = ",a.date.strftime("%Y%m%d%H%M%S%f")) 
         a = Message.objects.filter(sender=self.scope['user'],room = room, message = message).last()
         a.delete()
 
@@ -81,8 +92,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event): #when receiving (including the sender) # self = receiver
         message = event['message']
-        print(event['files'])
+        usrname=event["usrname"]
+        location=event["location"]
+        filetype=event["filetype"]
+        filename=event["filename"]
+        print(location)
         # a=Message.objects.create(sender=self.scope['user'],message=message)
         # a.save()
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({'message': message,'files': event['files']}))
+        await self.send(text_data=json.dumps({'usrname': usrname,'message':message,'location': location,"filetype":filetype,'filename':filename}))

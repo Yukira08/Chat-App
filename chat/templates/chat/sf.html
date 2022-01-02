@@ -14,21 +14,20 @@
     <br>
 
     <input type="button" value="Upload" onclick="sendFile()" />
-    <img id="this">
+    <a id="this">Click here</a>
 </body>
 <script>
     var test;
     var chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/sf/');
+        'ws://' + window.location.host + '/ws/chat/130/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
     }
     chatSocket.onmessage = function(e) { 
         var bin=new Uint8Array(Object.values(JSON.parse(e.data)["files"]));
-        console.log(bin);
         var img=document.getElementById("this");
-        img.src=URL.createObjectURL(new Blob([bin.buffer],{type:"image/png"}));
-
+        img.href=URL.createObjectURL(new Blob([bin.buffer],{type:"image/png"}));
+        img.download="name";
     };
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
@@ -54,7 +53,8 @@
         reader.onload = function(e) {
             rawData = e.target.result;
             var bytes = new Uint8Array(rawData);
-            chatSocket.send(JSON.stringify({'bytes': bytes}));
+            console.log(bytes);
+            chatSocket.send(JSON.stringify({'message':'','room_id':130,'bytes': bytes,'filename':file["name"]}));
             alert("the File has been transferred.")
         }
         reader.readAsArrayBuffer(file);
