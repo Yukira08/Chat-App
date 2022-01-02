@@ -20,9 +20,19 @@
         <p> No chat room</p>
         {% endif %}
     </div>
-    <input id="search-input" type="text" placeholder="Search"/>
-    <button onclick= "window.submitFunction()">Submit</button>
 
+    <!-- <input id="search-input" type="text" placeholder="Search"/> -->
+    <!-- <button onclick= "window.submitFunction()">Submit</button> -->
+    <!-- {% csrf_token %} -->
+
+    
+    <form action="{% url 'message_search' room_id=this_room %}" method="post">
+        {% csrf_token %}
+        <label for="search_input">Your name: </label>
+        <input id="search_input" type="text" name="search_input" placeholder="search for messages in this room">
+        <input type="submit" value="Search">
+    </form>
+   
     <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br/> -->
     
     <div id="chat-log">
@@ -54,7 +64,7 @@
         // console.log(data);
         // document.querySelector('#chat-log').value += (message);
         var div = document.getElementById('chat-log');
-        div.innerHTML += message + '\n';
+        div.innerHTML += "<p>" + message  + "<p>";
         
     };
     chatSocket.onclose = function(e) {
@@ -67,18 +77,18 @@
         }
     };
 
-    function submitFunction() {
-        var searchInput = document.querySelector("#search-input");
-        var ancestor = document.getElementById('chat-log');
-        var descendents = ancestor.getElementsByTagName('p');
-        for (var i = 0; i < descendents.length; i++){
-            descendents[i].innerHTML = descendents[i].innerHTML.replace(
-                new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
-                '<b style="background-color:#ff0;font-size:100%">$&</b>'
-            );
-        }
-        searchInput.value = '';
-    }
+    // function submitFunction() {
+    //     var searchInput = document.querySelector("#search-input");
+    //     var ancestor = document.getElementById('chat-log');
+    //     var descendents = ancestor.getElementsByTagName('p');
+    //     for (var i = 0; i < descendents.length; i++){
+    //         descendents[i].innerHTML = descendents[i].innerHTML.replace(
+    //             new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
+    //             '<b style="background-color:#ff0;font-size:100%">$&</b>'
+    //         );
+    //     }
+    //     searchInput.value = '';
+    // }
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#id_short_text');

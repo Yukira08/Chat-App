@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:room_id>/', views.room, name='room'),
     path('error', views.error, name = 'error'),
     path('test/test',views.sf,name='sf'),
+    path('<int:room_id>/search/', views.message_search, name = 'message_search'),
 ]

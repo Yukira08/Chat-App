@@ -5,6 +5,7 @@ from accounts.views import friendlist
 from accounts.models import User, Friendship
 import json
 from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 def index(request):
@@ -82,3 +83,17 @@ def create_room(request):
 @login_required
 def sf(request):
     return render(request,'chat/sf.html')
+
+@login_required
+def message_search(request, room_id):
+
+    if request.method== "POST":
+        search_input = request.POST['search_input']
+        cur_room = Room.objects.get(id=room_id)
+        messages = Message.objects.filter(room = cur_room, message__icontains = search_input)
+        return render(request, 'chat/message_search.html', {
+            'messages' : messages,
+            'search': mark_safe(json.dumps(search_input)),
+        })
+    else:
+        return redirect(error)
