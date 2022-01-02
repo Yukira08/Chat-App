@@ -1,0 +1,15 @@
+<html lang="ja"><head><meta charset="utf-8"></head>
+  <body>
+    <h1>Friend lists</h1>
+    <div>
+        {% if friends %}
+        {% for friend in friends %}
+        <a href="{% url 'profile' username=friend.username %}">{{ friend.username }}</a>
+        {% endfor %}
+        {% else %}
+        <p> No matching results </p>
+        {% endif %}
+    </div>
+</body>
+</html>
+
