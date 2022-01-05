@@ -1,11 +1,11 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm 
 from .models import User
-class CustomUserCreationForm(UserCreationForm):
+# class CustomUserCreationForm(UserCreationForm):
 
-    class Meta:
-        model = User
-        fields = ('username','email',)
+#     class Meta:
+#         model = User
+#         fields = ('username','email',)
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
@@ -16,6 +16,7 @@ class ProfileUpdateForm(forms.ModelForm):
 class CustomUserCreationForm(UserCreationForm):
     #username=forms.username(help_text="Required. Make it unique")
     class Meta(UserCreationForm.Meta):
+        model = User
         help_texts={
         'username':None,
     }
