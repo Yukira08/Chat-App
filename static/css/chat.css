@@ -4,7 +4,7 @@
 }
 .column{
     float: left;
-    height: 100vw;
+    height: 100vh;
 }
 .bar{
     width: 5%;
@@ -51,4 +51,33 @@ input[type=text]{
     padding: 6px;
     font-size: 17px;
     border: none;   
+}
+
+.footer{
+    bottom: 0px;
+    position: absolute;
+    width: auto;
+}
+.type_msg{
+    border: 0 !important;
+    overflow-y: auto;
+    width: 500px !important;
+    margin: 0;
+}
+
+.type_msg:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+.attach_btn {
+    cursor: pointer;
+    height: 60px;
+
+}
+
+.send_btn {
+    cursor: pointer; 
+    height: 100px !important;
+    margin: 0;
 }

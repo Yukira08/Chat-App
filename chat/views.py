@@ -81,3 +81,6 @@ def create_room(request):
 @login_required
 def sf(request):
     return render(request,'chat/sf.html')
+
+def test(request):
+    return render(request,'chat/copy_code.html')

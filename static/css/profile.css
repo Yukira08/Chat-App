@@ -15,6 +15,7 @@ body {
 }
 
 
+
 .name {
     font-size: 22px;
     font-weight: bold
@@ -45,12 +46,14 @@ body {
     position: relative;
     height: 140px;
     width: 140px;
+    background-color: white;
   }
 
   .user_img {
     height: 140px;
     width: 140px;
     border: 1.5px solid black;
+    border-radius: 50%;
   }
 .active {
     background-color: rgba(0, 0, 0, 0.3);
@@ -79,8 +82,15 @@ body {
   margin: 0;
   padding: 0;
 }
-.scrollmenu li{
-  display: inline;
-  margin: 10px;
-  text-align: center;
+
+/* .navbar-nav li {
+  display: inline-block !important;
 }
+.scroll {
+white-space: nowrap;
+overflow-x: auto; 
+-webkit-overflow-scrolling: touch;
+} */ 
+
+
+

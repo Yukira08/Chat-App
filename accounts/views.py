@@ -23,6 +23,7 @@ def signup(request):
     return render(request,'accounts/signup.html',{'form':form})
 def friendlist(username):
     friendnames = []
+    friend_number = 0
     inst=User.objects.get(username=username)
     fr=Friendship.objects.filter(friends=inst)
     for i in fr:
@@ -61,6 +62,7 @@ def profile(request,username):
         friend_number+=1
 
     data['friendnames'] = friendnames
+    data['friend_number'] = friend_number
     data['img_form']=img_form
     if request.user==inst:
         data['option']= False
