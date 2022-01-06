@@ -165,3 +165,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+CSRF_TRUSTED_ORIGINS = ['https://iniad-kapter.herokuapp.com']
