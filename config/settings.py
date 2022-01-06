@@ -156,4 +156,4 @@ CHANNEL_LAYERS = {
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
-CSRF_TRUSTED_ORIGINS = ['https://iniad-b.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://iniad-kapter.herokuapp.com']
