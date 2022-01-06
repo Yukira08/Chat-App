@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8"/>  <title>Chat Room</title>
 </head>
-<body>
+<body onload="init()">
     <div>
-        <p>Friendlist</p>
+        <p>Chat rooms</p>
         {% if chat_rooms %}
         <ul>
           {% for chat_room in chat_rooms %}
@@ -20,28 +20,94 @@
         <p> No chat room</p>
         {% endif %}
     </div>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
+
+    <input id="search-input" type="text" placeholder="Search"/> -->
+    <button onclick= "window.submitFunction()">Submit</button>
+    <!-- {% csrf_token %}
+
+    
+    <form action="{% url 'message_search' room_id=this_room %}" method="post">
+        {% csrf_token %}
+        <label for="search_input">Your name: </label>
+        <input id="search_input" type="text" name="search_input" placeholder="search for messages in this room">
+        <input type="submit" value="Search">
+    </form> -->
+   
+    <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br/> -->
+    
+    <div id="chat-log">
+        {% for message in messages %}
+        <p>{{message.sender.username}} : {{ message.message}} </p>
+        {% endfor %}
+    </div>
+
     {% csrf_token %}
     {{form.media}}
     {{form.short_text}}
-    <input id="chat-message-submit" type="button" value="Send"/>
+
+    <div id="Send">
+        <input id="chat-message-submit" type="button" value="Send"/>
+    </div>
+
+    <div id="test-file">
+<p>This place</p>
+    </div>
 
 </body>
 <script>
+    var fi='';
+    function init(){
+        var attach=document.createElement("input");
+        attach.type="file";
+        attach.id="filename";
+        attach.addEventListener("input",function(){fi=attach.files[0]["name"];});
+        var sending=document.getElementById("Send");
+        sending.appendChild(attach);        
+    }
     var room_id = {{ room_id }};
     var roomName = {{ room_name_json }};
     console.log(document.getElementById('id_short_text').value);
+    function sendFile(file,message,room_id){
+        var reader = new FileReader();
+        var rawData = new ArrayBuffer();
+        var bytes = new Uint8Array;            
+        reader.loadend = function() {
+        }
+        reader.onload = function(e) {
+            rawData = e.target.result;
+            bytes = new Uint8Array(rawData);
+            chatSocket.send(JSON.stringify({'message':message,'room_id':room_id,'filename':fi,'filetype':file.type,'filebin':bytes}));
+            console.log("Sending:" , bytes);
+        }
+        reader.readAsArrayBuffer(file);
+    }
     var chatSocket = new WebSocket(
         'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
-        var prevmes = {{messages}};
-        document.querySelector("#chat-log").value+=prevmes;
-    }
+        // var prevmes = {{messages}};
+        // document.querySelector("#chat-log").value+=prevmes;
+    };
+
     chatSocket.onmessage = function(e) {    
         var data = JSON.parse(e.data); var message = data['message'];
+        // console.log(data);
+        // document.querySelector('#chat-log').value += (message);
+        // var div = document.getElementById('chat-log');
+        // div.innerHTML += "<p>" + message  + "<p>";
+        
         console.log(data);
-        document.querySelector('#chat-log').value += (message);
+        if(message!=''){
+        msging(data);}
+        if (data['location']!=''){
+            if (data['filetype'].includes('image',0)){
+                imagefile(data);
+            }
+            else{
+                nomiefile(data);
+            }
+
+        }
     };
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
@@ -52,11 +118,49 @@
             document.querySelector('#chat-message-submit').click();
         }
     };
+
+    function submitFunction() {
+        var searchInput = document.querySelector("#search-input");
+        var ancestor = document.getElementById('chat-log');
+        var descendents = ancestor.getElementsByTagName('p');
+        for (var i = 0; i < descendents.length; i++){
+            descendents[i].innerHTML = descendents[i].innerHTML.replace(
+                new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
+                '<b style="background-color:#ff0;font-size:100%">$&</b>'
+            );
+        }
+        searchInput.value = '';
+    }
+
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#id_short_text');
         var message = messageInputDom.value;
-        chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id,'raw': 'none'}));
+        if (fi!= ''){
+            console.log("File included: ",fi);
+            var file = document.getElementById('filename').files[0];
+            sendFile(file,message,room_id);
+        }
+        if(message!=''){
+            chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id}));
+        }
         messageInputDom.value = '';
     };
+    function nomiefile(data){
+        var showlink=document.createElement("a");
+            showlink.href=data['location'];
+            showlink.innerText=data['filename'];
+            showlink.download=data['filename'];
+            document.getElementById("test-file").appendChild(showlink);
+    }
+    function imagefile(data){
+        var showlink=document.createElement("img");
+            showlink.src=data['location'];
+            document.getElementById("test-file").appendChild(showlink);
+    }
+    function msging(data){
+        var showlink=document.createElement("p");
+            showlink.innerText=(data["usrname"]+" : "+data["message"]);
+            document.getElementById('chat-log').appendChild(showlink);
+    }
 </script>
 </html>

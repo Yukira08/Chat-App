@@ -12,6 +12,15 @@
     <p><a href="{% url 'signup' %}">signup</a></p>
     {% endif %}
     
+
+    <p> Wanna search for another users ?</p>
+    <form action="{% url 'friend_search' %}" method="post">
+      {% csrf_token %}
+      <label for="search_input">username: </label>
+      <input id="search_input" type="text" name="search_input" placeholder="search for another users">
+      <input type="submit" value="Search">
+    </form>
+
     <!--p><a href="{% url 'index' %}">create chat room</a></p-->
     
     <p><a href="{% url 'add_room' %}"> add chat room</a></p>

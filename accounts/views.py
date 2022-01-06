@@ -82,3 +82,15 @@ def add_friend(request, friendname):
     Friendship.make_friend(inst, request.user)
 
     return profile(request, friendname)
+
+
+def friend_search(request):
+    if request.method=='POST':
+        username = request.POST['search_input']
+        friends = User.objects.filter(username__icontains = username)
+        return render(request, 'accounts/friend_lists.html', {
+            'friends' : friends,
+        })
+
+    else:
+        return redirect('home')

@@ -11,4 +11,5 @@ urlpatterns = [
     path('error', views.error, name = 'error'),
     path('test/test',views.sf,name='sf'),
     path('test',views.test,name='test'),
+    path('<int:room_id>/search/', views.message_search, name = 'message_search'),
 ]
