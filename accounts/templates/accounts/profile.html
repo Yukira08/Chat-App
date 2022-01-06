@@ -20,6 +20,15 @@
     .img_cont{
       border-radius: 50%;
     }
+    .img_icon{
+      position: absolute;
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      bottom: 0.4em;
+      right: 1em;
+      background-color: #b3b3b3;
+    }
   </style>
 </head>
 <body>
@@ -27,15 +36,11 @@
     <div class="card p-4">
         <div class=" image d-flex flex-column justify-content-center align-items-center"> 
           {% if per%}
-          <div class="img_cont active">
+          <div class="img_cont">
             <img src="{{user.image.url}}" class="rounded-circle user_img">
-            <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              {{ img_form | crispy}}
-              <button type="submit">Change</button>
-            </form>
+            <span class="img_icon"><i style="padding: 8px;">{% bs_icon 'camera-fill' color='black'%}</i></span>
           </div>
-          <br><br><br><br><br>
+
           {%else%}
           {% if online%}
           <div class="img_cont active">
@@ -75,4 +80,4 @@
     </div>
 </div>
 </body>
-</html> -->
+</html>
