@@ -26,8 +26,8 @@ SECRET_KEY = 'django-insecure-i=jeg=p3+)1sv$3m=noe^9qgfpm9f^ccd6b&tdqx99(8sye1y&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'iniad-kapter.herokuapp.com']
 
 # Application definition
 
@@ -85,6 +85,11 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
 AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
@@ -139,15 +144,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Channels
 ASGI_APPLICATION = 'config.asgi.application'
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             "hosts": [('127.0.0.1', 6379)],
+#         },
+#     },
+# }
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            #"hosts": [ os.environ.get('REDIS_URL', 'redis://localhost:6379'), ('127.0.0.1', 6379)],
+            "hosts": ["redis://:pba92bd95e7b9c4446a504d81e262d758e00f2ec091ca634d83a85546e64a49d9@ec2-54-87-59-241.compute-1.amazonaws.com:10020"] 
+        },
+    },
+}
