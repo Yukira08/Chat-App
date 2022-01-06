@@ -41,13 +41,16 @@
         {% endfor %}
     </div>
 
-    {% csrf_token %}
+    <!-- {% csrf_token %}
     {{form.media}}
-    {{form.short_text}}
+    {{form.short_text}} -->
+    <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
+    <input id="chat-message-input" type="text" size="100"/><br/>
+    <input id="chat-message-submit" type="button" value="Send"/>
 
-    <div id="Send">
+    <!-- <div id="Send">
         <input id="chat-message-submit" type="button" value="Send"/>
-    </div>
+    </div> -->
 
     <div id="test-file">
 <p>This place</p>
@@ -66,7 +69,7 @@
     }
     var room_id = {{ room_id }};
     var roomName = {{ room_name_json }};
-    console.log(document.getElementById('id_short_text').value);
+    console.log(document.getElementById('#chat-message-input').value);
     function sendFile(file,message,room_id){
         var reader = new FileReader();
         var rawData = new ArrayBuffer();
@@ -112,8 +115,8 @@
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
-    document.querySelector('#id_short_text').focus();
-    document.querySelector('#id_short_text').onkeyup = function(e) {
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
         if (e.keyCode === 13) {  // enter, return
             document.querySelector('#chat-message-submit').click();
         }
@@ -133,7 +136,7 @@
     }
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
-        var messageInputDom = document.querySelector('#id_short_text');
+        var messageInputDom = document.querySelector('#chat-message-input');
         var message = messageInputDom.value;
         if (fi!= ''){
             console.log("File included: ",fi);
