@@ -9,7 +9,7 @@ class User(AbstractUser):
     description = models.CharField(max_length=300)
     online_status = models.IntegerField(default=0)
     offline_time = models.TimeField(default = datetime.now())
-    image = models.ImageField(default='pic.jpg',upload_to='profile_pics/')
+    img = models.ImageField(default='pic.jpg',upload_to='profile_pics/')
 
 class Friendship(models.Model):
     #add status field
