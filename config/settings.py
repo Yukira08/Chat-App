@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-i=jeg=p3+)1sv$3m=noe^9qgfpm9f^ccd6b&tdqx99(8sye1y&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'iniad-kapter.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -87,11 +87,6 @@ DATABASES = {
 }
 AUTH_USER_MODEL = 'accounts.User'
 
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=600)
-DATABASES['default'].update(db_from_env)
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -148,12 +143,11 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            #"hosts": [('127.0.0.1', 6379)],
-            "hosts" : ['redis://:pba92bd95e7b9c4446a504d81e262d758e00f2ec091ca634d83a85546e64a49d9@ec2-54-87-59-241.compute-1.amazonaws.com:10020'],
+            "hosts": [('127.0.0.1', 6379)],
         },
     },
 }
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
-CSRF_TRUSTED_ORIGINS = ['https://iniad-kapter.herokuapp.com']
+
