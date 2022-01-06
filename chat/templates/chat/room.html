@@ -105,7 +105,7 @@
 									<span class="msg_time_send">8:55 AM, Today</span>
 								</div>
 								<div class="img_cont_msg">
-							<img src=""class="rounded-circle user_img_msg">
+							<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"class="rounded-circle user_img_msg">
 								</div>
 							</div>
                             {% else %}
@@ -131,12 +131,11 @@
                                     <div class="input-group-append">
 									    <label class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></label>
                                     </div>
-                                    <input type="text" name="" id="input-message" class="form-control type_msg" placeholder="Type your message...">
                                     {% csrf_token %}
                                     {{form.media}}
                                     {{form.short_text}}
                                     <div class="input-group-append">
-                                        <button class="btn btn-secondary" type="submit" value = "Send">
+                                        <button class="btn btn-secondary" id="chat-message-submit" type="submit" value = "Send">
                                             <span class="input-group-text send_btn">
                                                 <i class="fas fa-location-arrow"></i>
                                             </span>
@@ -205,7 +204,12 @@
         attach.id="filename";
         attach.addEventListener("input",function(){fi=attach.files[0]["name"];});
         var sending=document.getElementsByClassName("input-group-text attach_btn")[0];
-        sending.appendChild(attach);        
+        sending.appendChild(attach); 
+        var inputdiv = document.getElementsByClassName("dep-container")[0];
+        inputdiv.className="input-group-append";
+        var inputtext=document.getElementById("id_short_text");
+        inputtext.className="form-control type_msg";
+        inputtext.placeholder="Type your message...";
     }
     var room_id = {{ room_id }};
     var roomName = {{ room_name_json }};
@@ -301,9 +305,36 @@
             document.getElementById("test-file").appendChild(showlink);
     }
     function msging(data){
-        var showlink=document.createElement("p");
-            showlink.innerText=(data["usrname"]+" : "+data["message"]);
-            document.getElementById('chat-log').appendChild(showlink);
+        const predef=[["d-flex mb-4 replied", "msg_cotainer_send","msg_time_send"],["d-flex mb-4 received", "msg_cotainer","msg_time"],["img_cont_msg","rounded-circle user_img_msg"]];
+        var icon=document.createElement("div");
+            icon.className=predef[2][0];
+        var immg=document.createElement("img");
+            immg.className=predef[2][1];
+            immg.src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg";
+        icon.appendChild(immg);
+        var m=0;
+        if (data["usrname"]!="admin"){
+            m=1;
+        }
+        var msg = document.createElement("div");
+            msg.className=predef[m][1];
+            msg.innerText=data["message"];
+        var msgtime = document.createElement("div");
+            msgtime.className=predef[m][2];
+            msgtime.innerText="8:40 AM, Today";
+        msg.appendChild(msgtime);
+
+        var showlink=document.createElement("div");
+            showlink.className=predef[m][0];
+        if (m==1){
+            showlink.appendChild(icon);
+            showlink.appendChild(msg);
+        }
+        else{
+            showlink.appendChild(msg); 
+            showlink.appendChild(icon);           
+        }
+            document.getElementsByClassName('card-body msg_card_body')[0].appendChild(showlink);
     }
 </script>
 </html>

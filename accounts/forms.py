@@ -11,6 +11,9 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields= ['image']
+        # widgets={
+        #     'image': 
+        # }
 
 
 class CustomUserCreationForm(UserCreationForm):
