@@ -42,12 +42,13 @@ body {
     color: #545454;
     font-weight: 500
 }
-.img_cont {
+/* .img_cont {
     position: relative;
     height: 140px;
     width: 140px;
-    background-color: white;
-  }
+    
+    border-radius: 50%;
+  } */
 
   .user_img {
     height: 140px;

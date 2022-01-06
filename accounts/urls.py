@@ -6,9 +6,5 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('<str:username>',views.profile,name='profile'),
     path('<str:friendname>/addfriend',views.add_friend,name='add_friend'),
-<<<<<<< HEAD
-] 
-=======
     path('friends/search/', views.friend_search, name = 'friend_search')
 ]
->>>>>>> master

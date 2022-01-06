@@ -1,12 +1,161 @@
+{% load static%}
 <!DOCTYPE html>
 <!-- chat/templates/chat/room.html -->
 <html>
 <head>
     <meta charset="utf-8"/>  <title>Chat Room</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="{% static 'css/chat.css'%}">
+    <link rel="stylesheet" href="{% static 'js/room.js'%}">
 </head>
 <body onload="init()">
-    <div>
-        <p>Chat rooms</p>
+    {% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+		<link rel="stylesheet" href="{% static 'css/chat.css'%}">
+		<link rel="stylesheet" href="{% static 'js/room.js'%}">
+    </head>
+	<body>
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+				<div class="col-md-0 h-100 chat mt-4">
+					<div class="nav ">
+						<ul class="navbar-nav">
+							<li class="nav-item">
+							<a class="nav-link" href="#"><i class="fas fa-user fa-2x"></i></a>
+							</li>
+							<li class="nav-item">
+							<a class="nav-link" href="#"><i class="fas fa-comment-dots fa-2x"></i></a>
+							</li>
+							<li class="nav-item">
+							<a class="nav-link" href="#"><i class="fas fa-address-book fa-2x"></i></a>
+							</li>
+							<li class="nav-item">
+							<a class="nav-link" href="#"> <i class="fas fa-user-plus fa-2x"></i></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-3 col-xl-3  margin chat h-100 mt-4">
+                    <div class="card  mb-sm-3 mb-md-0 contacts_card">
+					<div class="card-header">
+						<div class="input-group">
+							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<div class="input-group-prepend">
+								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="card-body contacts_body">
+						{% if chat_rooms %}
+						<ul class="contacts">
+							{% for chat_room in chat_rooms %}
+							{% if chat_room.id != this_room %}
+							<li><a href="{% url 'room' room_id=chat_room.id %}" style="color: white;">{{ chat_room.name }}</a></li>
+							{% endif %}
+							{% endfor %}
+						{% endif %}
+						</ul>
+					</div>
+					<div class="card-footer"></div>
+				</div></div>
+				<div class="col-md-7 col-xl-6 chat h-100 mt-4">
+					<div class="card">
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+								<div class="img_cont">
+									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+									<span class="online_icon"></span>
+								</div>
+                                {% if chat_room.id != this_room %}
+								<div class="user_info">
+									<span>{{ chat_room.name }}</span>
+									<p>1767 Messages</p>
+								</div>
+                                {% endif %}
+								<div class="video_cam">
+									<span><i class="fas fa-video"></i></span>
+									<span><i class="fas fa-phone"></i></span>
+								</div>
+							</div>
+							<span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+							<div class="action_menu">
+								<ul>
+									<li><i class="fas fa-user-circle"></i> View profile</li>
+									<li><i class="fas fa-users"></i> Add to close friends</li>
+									<li><i class="fas fa-plus"></i> Add to group</li>
+									<li><i class="fas fa-ban"></i> Block</li>
+								</ul>
+							</div>
+						</div>
+						<div class="card-body msg_card_body">
+                            <!------- messages ------->
+                            {% for message in messages %}
+                            {% if message.sender == user %}
+                            <div class="d-flex mb-4 replied">
+								<div class="msg_cotainer_send">
+									{{ message.message}}
+									<span class="msg_time_send">8:55 AM, Today</span>
+								</div>
+								<div class="img_cont_msg">
+							<img src=""class="rounded-circle user_img_msg">
+								</div>
+							</div>
+                            {% else %}
+                            <div class="d-flex mb-4 received">
+								<div class="img_cont_msg">
+									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+								</div>
+
+								<div class="msg_cotainer">
+									{{ message.message}}
+									<span class="msg_time">8:40 AM, Today</span>
+								</div>
+							</div>
+                            {% endif %}
+                            {% endfor %}
+
+
+                            <!------- messages ------->
+						</div>
+						<div class="card-footer">
+							<form id="send-message-form">
+                                <div class="input-group">
+                                    <div class="input-group-append">
+									    <label class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></label>
+                                    </div>
+                                    <input type="text" name="" id="input-message" class="form-control type_msg" placeholder="Type your message...">
+                                    {% csrf_token %}
+                                    {{form.media}}
+                                    {{form.short_text}}
+                                    <div class="input-group-append">
+                                        <button class="btn btn-secondary" type="submit" value = "Send">
+                                            <span class="input-group-text send_btn">
+                                                <i class="fas fa-location-arrow"></i>
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br/> -->
+
+                                    <!-- <input id="chat-message-submit" type="button" value="Send"/> -->
+							    </div>
+						    </form>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+    <!-- <div>
+        <p>Friendlist</p>
         {% if chat_rooms %}
         <ul>
           {% for chat_room in chat_rooms %}
@@ -35,13 +184,7 @@
    
     <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br/> -->
     
-    <div id="chat-log">
-        {% for message in messages %}
-        <p>{{message.sender.username}} : {{ message.message}} </p>
-        {% endfor %}
-    </div>
-
-    {% csrf_token %}
+    <!-- {% csrf_token %}
     {{form.media}}
     {{form.short_text}}
 
@@ -51,7 +194,7 @@
 
     <div id="test-file">
 <p>This place</p>
-    </div>
+    </div> -->
 
 </body>
 <script>
@@ -61,7 +204,7 @@
         attach.type="file";
         attach.id="filename";
         attach.addEventListener("input",function(){fi=attach.files[0]["name"];});
-        var sending=document.getElementById("Send");
+        var sending=document.getElementsByClassName("input-group-text attach_btn")[0];
         sending.appendChild(attach);        
     }
     var room_id = {{ room_id }};
