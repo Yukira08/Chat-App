@@ -10,6 +10,7 @@ def login(request):
         return redirect('home')
     return render(request, 'accounts/login.html')
 
+
 def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -22,11 +23,13 @@ def signup(request):
     return render(request,'accounts/signup.html',{'form':form})
 def friendlist(username):
     friendnames = []
+    friend_number = 0
     inst=User.objects.get(username=username)
     fr=Friendship.objects.filter(friends=inst)
     for i in fr:
         friendnames.append(i.cur_user.username)
     return friendnames
+
 
 def profile(request,username):
     friendnames = friendlist(request.user.username)
@@ -39,8 +42,11 @@ def profile(request,username):
     else:
         img_form=ProfileUpdateForm(instance=request.user)
     data={}
+    friendnames = []
+    friend_number = 0
     inst=User.objects.get(username=username)
     data['user']=inst
+    data['img_form']=img_form
     Friendship.objects.filter(friends=inst)
     data['offline_time'] = inst.offline_time
 
@@ -53,8 +59,10 @@ def profile(request,username):
     #print(data['online'])
     for i in Friendship.objects.filter(friends=inst):
         friendnames.append(i.cur_user.username)
+        friend_number+=1
 
     data['friendnames'] = friendnames
+    data['friend_number'] = friend_number
     data['img_form']=img_form
     if request.user==inst:
         data['option']= False

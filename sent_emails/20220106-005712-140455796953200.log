@@ -1,0 +1,26 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on 127.0.0.1:8000
+From: webmaster@localhost
+To: s1F102000028@iniad.org
+Date: Wed, 05 Jan 2022 15:57:12 -0000
+Message-ID: 
+ <164139823270.1247.17878919566188450568@DESKTOP-5KOS173.localdomain>
+
+
+You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8000.
+
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8000/accounts/reset/MTA/ayt1bc-ba0850ae9c8689a479e26b5e07bb1410/
+
+Your username, in case you’ve forgotten: guniang
+
+Thanks for using our site!
+
+The 127.0.0.1:8000 team
+
+
+
+-------------------------------------------------------------------------------

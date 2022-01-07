@@ -15,6 +15,7 @@ body {
 }
 
 
+
 .name {
     font-size: 22px;
     font-weight: bold
@@ -41,16 +42,19 @@ body {
     color: #545454;
     font-weight: 500
 }
-.img_cont {
+/* .img_cont {
     position: relative;
     height: 140px;
     width: 140px;
-  }
+    
+    border-radius: 50%;
+  } */
 
   .user_img {
     height: 140px;
     width: 140px;
     border: 1.5px solid black;
+    border-radius: 50%;
   }
 .active {
     background-color: rgba(0, 0, 0, 0.3);
@@ -69,3 +73,25 @@ body {
   .offline {
     background-color: #c23616 !important;
   }
+
+.btn{
+  margin-top: 10px;
+  width: 100% !important;
+}
+
+.scrollmenu ul{
+  margin: 0;
+  padding: 0;
+}
+
+/* .navbar-nav li {
+  display: inline-block !important;
+}
+.scroll {
+white-space: nowrap;
+overflow-x: auto; 
+-webkit-overflow-scrolling: touch;
+} */ 
+
+
+

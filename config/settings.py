@@ -32,10 +32,12 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'iniad-kapter.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
     'channels',
     'chat',
     'authtest',
     'accounts',
+    'django_bootstrap_icons',
     'emoji_picker',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -165,5 +167,15 @@ CHANNEL_LAYERS = {
         },
     },
 }
+<<<<<<< HEAD
 
 CSRF_TRUSTED_ORIGINS = ['https://iniad-kapter.herokuapp.com']
+=======
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
+>>>>>>> beanstalk
