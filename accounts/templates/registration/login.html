@@ -1,4 +1,22 @@
-<html lang="ja"><head><meta charset="utf-8"></head>
+{%extends 'base.html'%}
+{% load crispy_forms_tags%}
+{% block content%}
+<h1 class="text-center fw-bold mb-5 mx-1 mx-md-4 mt-4" style="color: var(--primary);">Log In</h1>
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <a href="" class="text-decoration-none">Forgot your password?</a>
+    <br><br>
+    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+      <input type="submit" class="btn btn-success btn-lg" value="Log In">
+    </div> 
+    Not Registered? <a href="{%url 'signup'%}" style="text-decoration: none;">Create an account</a>
+  </form>
+{% endblock %}
+<!-- <html lang="ja"><head><meta charset="utf-8"></head>
   <body>
     <h1>Login</h1>
 {% if form.errors %}
@@ -12,4 +30,4 @@
 
     <p><a href="{% url 'home' %}">home</a></p>
   </body>
-</html>
+</html> -->
