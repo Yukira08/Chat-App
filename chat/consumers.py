@@ -54,6 +54,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self,message,room_id,time,name=None,type=None,binn=None):
+        print("receiving message")
         room = Room.objects.get(id=room_id)
         a=Message.objects.create(sender=self.scope['user'],room = room, date=time,message=message,filename=name)
         if name!=None:
@@ -68,7 +69,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             f.close()
         a.save()
         a = Message.objects.filter(sender=self.scope['user'],room = room, message = message).last()
-        a.delete()
+        #a.delete()
 
     @database_sync_to_async
     def online_update(self):
