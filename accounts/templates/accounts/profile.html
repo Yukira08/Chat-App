@@ -1,61 +1,6 @@
-<<<<<<< HEAD
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-</head>
-<body>
-    <div class="content-section">
-        <div class="media">
-          <div class="media-body">
-            <img style="width: 300px;" src="{{ user.img.url}}">
-            <h2 class="account-heading">{{ user.username }}</h2>
-            <p class="text-secondary">{{ user.email }}</p>
-            
-            {% if online %}
-            <p> ONLINE </p>
-            {% else %}
-            <p> OFFLINE </p>
-            <p> was online at {{ offline_time }} </p>
-            {% endif %}
-
-            {% if option %}
-            <a href="{% url 'add_friend' friendname=user.username %}">addfriend</a>
-            {% endif %}
-            {% if per %}
-            <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              {{ img_form }}
-              <button type="submit">Change</button>
-            </form>
-            {% endif %}
-
-            {% if friendnames %}
-            <ul>
-              {% for friendname in friendnames %}
-            <li><a href="{% url 'profile' username=friendname %}">{{ friendname }}</a></li>
-              {% endfor %}
-            </ul>
-            {% else %}
-            <p> No friends</p>
-            {% endif %}
-          
-          </div>
-        </div>
-         FORM HERE
-      </div>
-</body>
-</html>
-
-<!-- {% load static%}
-=======
 {% load static%}
 {% load bootstrap_icons %}
 {% load crispy_forms_tags%}
->>>>>>> beanstalk
 <!DOCTYPE html>
 <html lang="en">
 <head>
