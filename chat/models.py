@@ -18,7 +18,7 @@ class Room(models.Model):
     participants=models.ManyToManyField(to=settings.AUTH_USER_MODEL)
 
 class Message(models.Model): #Change to Message
-    idmessage=models.IntegerField(primary_key=True)
+    idmessage=models.AutoField(primary_key=True)
     sender=models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     room =models.ForeignKey(Room,on_delete=models.CASCADE)
     date=models.DateTimeField()
