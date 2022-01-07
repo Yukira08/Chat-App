@@ -167,10 +167,8 @@ CHANNEL_LAYERS = {
         },
     },
 }
-<<<<<<< HEAD
 
 CSRF_TRUSTED_ORIGINS = ['https://iniad-kapter.herokuapp.com']
-=======
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
@@ -178,4 +176,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
->>>>>>> beanstalk

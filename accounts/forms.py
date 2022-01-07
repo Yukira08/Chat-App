@@ -1,18 +1,17 @@
-<<<<<<< HEAD
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from .models import User
-class CustomUserCreationForm(UserCreationForm):
+# from django import forms
+# from django.contrib.auth.forms import UserCreationForm
+# from .models import User
+# class CustomUserCreationForm(UserCreationForm):
 
-    class Meta:
-        model = User
-        fields = ('username','email',)
+#     class Meta:
+#         model = User
+#         fields = ('username','email',)
 
-class ProfileUpdateForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields= ['img']
-=======
+# class ProfileUpdateForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields= ['img']
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm 
 from .models import User
@@ -25,7 +24,7 @@ from .models import User
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields= ['image']
+        fields= ['img']
         # widgets={
         #     'image': 
         # }
@@ -44,4 +43,3 @@ class CustomUserCreationForm(UserCreationForm):
 
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
->>>>>>> beanstalk
