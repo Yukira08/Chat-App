@@ -44,7 +44,7 @@ html {
 }
 .msg_card_body {
   overflow-y: auto;
-  max-height: 65%;
+  max-height: 80%;
   padding-bottom: 20px;
 }
 .card-header {
