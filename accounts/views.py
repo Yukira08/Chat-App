@@ -104,7 +104,7 @@ def add_friend(request, friendname):
         friend_req.save()
         notification = Notification.objects.create(sender = friend_req.sender, receiver = friend_req.receiver, noti_type = 2, time = datetime.now(), destination = friend_req.sender.id)
         notification.save()
-    return profile(request, friendname)
+    return redirect(profile, username = friendname)
 
 def accept_friend(request, friendname):
     try:
@@ -118,9 +118,17 @@ def accept_friend(request, friendname):
 
         Friendship.make_friend(request.user, inst)
         Friendship.make_friend(inst, request.user)
-        return profile(request, friendname)
+        return redirect(profile, username = friendname)
     except:
-        return profile(request, friendname)
+        return redirect(profile, username = friendname)
+
+def unfriend(request, friendname):
+    inst=User.objects.get(username=friendname)
+    Friendship.unfriend(request.user, inst)
+    Friendship.unfriend(inst, request.user)
+    return redirect(profile, username = friendname)
+
+
 
 def friend_search(request):
     if request.method=='POST':

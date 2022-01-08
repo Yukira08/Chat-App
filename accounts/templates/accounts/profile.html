@@ -72,7 +72,10 @@
             {% endif %}
 
           {%else%}
+          {% if not per %}
+          <a href="{% url 'unfriend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} UnFriend</a>
           <a class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} &nbsp;Friends</a>
+          {% endif %}
           {% endif %}
             <div class="d-flex flex-row justify-content-center align-items-center mt-3"> 
               <span class="number">{{ friend_number}} <span class="friend">Friends</span></span> 
