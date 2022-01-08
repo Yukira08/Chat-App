@@ -6,11 +6,8 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    # dependencies = [
-    #     ('accounts', '0012_alter_user_offline_time_notification'),
-    # ]
     dependencies = [
-        ('accounts', '0011_alter_user_offline_time'),
+        ('accounts', '0012_alter_user_offline_time_notification'),
     ]
 
     operations = [
