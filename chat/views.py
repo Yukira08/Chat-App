@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.safestring import mark_safe
-from .models import Room, Message, YourModelForm
+from .models import Room, Message, RoomCache, YourModelForm
 from accounts.views import friendlist
-from accounts.models import User, Friendship
+from accounts.models import Notification, User, Friendship
 import json
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.core import serializers
+import json
 
 # Create your views here.
 
@@ -36,14 +39,16 @@ def room(request, room_id):
     available_room=Room.objects.filter(participants=request.user)
     # available_room.remove(cur_room)
     f=YourModelForm()
+    notifications = Notification.objects.filter(receiver = request.user)
+
     return render(request, 'chat/room.html', {
-        'room_name_json': mark_safe(json.dumps(a.name)),
         'room_id' : mark_safe(json.dumps(room_id)),
         'messages' : mark_safe(json.dumps(messages)),
         'chat_rooms':available_room,
         'this_room' : room_id,
         'form': f,
         'messages' : Message.objects.filter(room = a),
+        'notifications' : notifications,
     })
 
 
@@ -76,6 +81,9 @@ def create_room(request):
             a = User.objects.get(username=friend)
             new_room.participants.add(a)
         new_room.save()
+
+        #room_cache = RoomCache.objects.create(room = new_room)
+        #room_cache.save()
         return redirect(room, room_id=new_room.id)
 
     return redirect(error)
@@ -101,5 +109,11 @@ def message_search(request, room_id):
         return redirect(error)
 
 
+@login_required
+def load_noti(request):
+    """Returns a json response to an ajax call. (request.user is available in view)"""
+    signal = request.GET.get('signal')  # Make sure to use POST/GET correctly
+    print(signal)
+    notification = Notification.objects.filter(receiver = request.user).values()
 
-    
+    return JsonResponse(data={"notification":list(notification)}, status=200)

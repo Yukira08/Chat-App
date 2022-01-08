@@ -32,3 +32,9 @@ class YourModelForm(forms.ModelForm):
     class Meta:
         model = Message
         fields=('message','idmessage')
+
+
+class RoomCache(models.Model):
+    id = models.AutoField(primary_key=True)
+    room = models.ForeignKey(Room,on_delete=models.CASCADE)
+    participants=models.ManyToManyField(to=settings.AUTH_USER_MODEL,null=True)

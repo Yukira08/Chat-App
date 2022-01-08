@@ -1,15 +1,18 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from channels.db import database_sync_to_async
-from .models import Message, Room
-from accounts.models import User
+from .models import Message, Room, RoomCache
+#from .models import NEW_MESSAGE_TYPE, FRIEND_REQUEST_TYPE
+from accounts.models import Notification, User
 from datetime import datetime
 import json
 from django.conf import settings
 import os
+
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        print("Connecting to socket")
+        #print("Connecting to socket")
         self.room_name = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = 'chat_%s' % self.room_name
         # self.user=self.scope["user"]
@@ -22,6 +25,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.online_update()
 
+        await self.participants_cache_add(self.scope['url_route']['kwargs']['room_id'])
+
     async def disconnect(self, close_code):
         # Leave room group
         await self.channel_layer.group_discard(
@@ -30,6 +35,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         await self.offline_update()
+
+        await self.participants_cache_delete(self.scope['url_route']['kwargs']['room_id'])
 
     # Receive message from WebSocket
     async def receive(self, text_data): #when sending message
@@ -71,6 +78,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
         a = Message.objects.filter(sender=self.scope['user'],room = room, message = message).last()
         #a.delete()
 
+
+        #send notification
+        room_cache = RoomCache.objects.get(room = room)
+        participants = room.participants.all()
+        #print(participants)
+        present_participants = room_cache.participants.all()
+        #print(present_participants)
+        for participant in participants:
+            if participant not in present_participants:
+                #print(participant)
+                notification = Notification.objects.create(sender = self.scope['user'], receiver = participant, noti_type = 1, time = time, destination = room_id)
+                notification.save()
+                print(notification.receiver.username)
+
+
     @database_sync_to_async
     def online_update(self):
         user = User.objects.get(id = self.scope['user'].id)
@@ -99,36 +121,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Send message to WebSocket
         await self.send(text_data=json.dumps({'usrname': usrname,'message':message,'location': location,"filetype":filetype,'filename':filename}))
 
-# from asgiref.sync import async_to_sync
-# from channels.generic.websocket import WebsocketConsumer
-# import json
-# class ChatConsumer(WebsocketConsumer):
-#     def connect(self):
-#         self.room_name = self.scope['url_route']['kwargs']['room_id']
-#         self.room_group_name = 'chat_%s' % self.room_name
-#         # Join room group
-#         async_to_sync(self.channel_layer.group_add)(
-#             self.room_group_name,
-#             self.channel_name
-#         )
-#         self.accept()
-#     def disconnect(self, close_code):
-#         # Leave room group
-#         async_to_sync(self.channel_layer.group_discard)(
-#             self.room_group_name,
-#             self.channel_name
-#         )
-#     # Receive message from WebSocket
-#     def receive(self, text_data):
-#         text_data_json = json.loads(text_data)
-#         message = text_data_json['message']
-#         # Send message to room group
-#         async_to_sync(self.channel_layer.group_send)(
-#             self.room_group_name,
-#             { 'type': 'chat_message', 'message': message }
-#         )
-#     # Receive message from room group
-#     def chat_message(self, event):
-#         message = event['message']
-#         # Send message to WebSocket
-#         self.send(text_data=json.dumps({'message': message}))
+    @database_sync_to_async
+    def participants_cache_add(self, room_id):
+        room = Room.objects.get(id=room_id)
+        try:
+            room_cache = RoomCache.objects.get(room = room)
+        except:
+            room_cache = RoomCache.objects.create(room = room)
+        #room_cache.save()
+        room_cache.participants.add(self.scope['user'])
+        room_cache.save()
+        print(room_cache.participants.all())
+
+    @database_sync_to_async
+    def participants_cache_delete(self, room_id):
+        room = Room.objects.get(id=room_id)
+        room_cache = RoomCache.objects.get(room = room)
+        # try:
+        #     room_cache = RoomCache.objects.get(room = room)
+        # except:
+        #     room_cache = RoomCache.objects.create(room = room)
+        #room_cache.save()
+        room_cache.participants.remove(self.scope['user'])
+        room_cache.save()
+        print(room_cache.participants.all())
