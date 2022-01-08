@@ -84,7 +84,7 @@ def profile(request,username):
                 data['accept_friend'] = True
                 print("first stop")
             else :
-                if FriendRequest.objects.filter(sender=request.user, receiver=inst).exists():
+                if FriendRequest.objects.filter(sender=request.user, receiver=inst, accepted = False).exists():
                     data['request_sent'] = True
                 else :
                     data['add_friend'] = True
