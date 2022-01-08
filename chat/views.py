@@ -117,7 +117,7 @@ def load_noti(request):
     signal = request.GET.get('signal')  
     print(signal)
 
-    notification = Notification.objects.filter(receiver = request.user, unread = True)
+    notification = Notification.objects.filter(receiver = request.user, unread = True).order_by('-time')
     senders = []
     for n in notification:
         senders.append(n.sender.username)

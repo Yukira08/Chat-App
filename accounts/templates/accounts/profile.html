@@ -63,7 +63,14 @@
           <span class="name mt-3">{{user.username}}</span> 
           <span class="idd">{{user.email}}</span>
           {% if option%}
-          <a href="{% url 'add_friend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} Add Friend</a>
+            {% if add_friend %}
+            <a href="{% url 'add_friend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} Add Friend</a>
+            {% elif accept_friend %}
+            <a href="{% url 'accept_friend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} Accept Friend</a>
+            {% elif request_sent %}
+            <p class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%}Friend request sent</p>
+            {% endif %}
+
           {%else%}
           <a class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} &nbsp;Friends</a>
           {% endif %}
