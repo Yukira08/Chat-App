@@ -46,10 +46,27 @@
                   <a href="#">Link 3</a> -->
                   {% if notifications %}
                   {% for notification in  notifications %}
-                  {% if notification.unread and notification.noti_type == 1 %}
-                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
-                  {% else %}
-                  <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>
+                    {% if notification.noti_type == 1 %}
+                    {% if notification.unread %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
+                    {% else %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>  
+                    {% endif %}
+
+                    {% elif notification.noti_type == 2 %}
+                    {% if notification.unread %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New friend request from {{ notification.sender }}</b></a></p>
+                    {% else %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}">New friend request from {{ notification.sender }}</a></p>  
+                    {% endif %}
+
+                    {% elif notification.noti_type == 3 %}
+                    {% if notification.unread %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>request accepted by {{ notification.sender }}</b></a></p>
+                    {% else %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"> request accepted by {{ notification.sender }}</a></p>  
+                    {% endif %}
+                    
                   {% endif %}
                   {% endfor %}
                   {% endif %}

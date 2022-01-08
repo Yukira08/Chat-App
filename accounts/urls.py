@@ -6,5 +6,6 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('profile/<str:username>',views.profile,name='profile'),
     path('<str:friendname>/addfriend',views.add_friend,name='add_friend'),
-    path('friends/search/', views.friend_search, name = 'friend_search')
+    path('<str:friendname>/acceptfriend',views.accept_friend,name='accept_friend'),
+    path('friends/search/', views.friend_search, name = 'friend_search'),
 ]

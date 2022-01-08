@@ -7,8 +7,9 @@ from django.conf import settings
 from django.db.models.fields import AutoField
 # Create your models here.
 
-NEW_MESSAGE_TYPE = 1
-FRIEND_REQUEST_TYPE = 2
+# new message : 1
+# got friend request 2
+# friend reuest accepted 3
 
 
 class User(AbstractUser):
@@ -34,6 +35,13 @@ class Friendship(models.Model):
             cur_user=cur_user
         )
         friend.friends.remove(new_friend)
+
+class FriendRequest(models.Model):
+    id = AutoField(primary_key=True)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='request_receiver')
+    sender =  models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='request_Fsender')
+    accepted = models.BooleanField(default = False)
+
 
 class Notification(models.Model):
     id = AutoField(primary_key=True)
