@@ -3,7 +3,13 @@ from django.contrib.auth.models import AbstractBaseUser,AbstractUser
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
+from django.conf import settings
+from django.db.models.fields import AutoField
 # Create your models here.
+
+NEW_MESSAGE_TYPE = 1
+FRIEND_REQUEST_TYPE = 2
+
 
 class User(AbstractUser):
     description = models.CharField(max_length=300)
@@ -29,3 +35,11 @@ class Friendship(models.Model):
         )
         friend.friends.remove(new_friend)
 
+class Notification(models.Model):
+    id = AutoField(primary_key=True)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='receiver')
+    sender =  models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='sender')
+    noti_type = models.IntegerField()
+    time=models.DateTimeField()
+    unread = models.BooleanField(default = True)
+    destination = models.IntegerField()
