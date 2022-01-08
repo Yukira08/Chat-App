@@ -134,3 +134,8 @@ def read_noti(request, noti_id):
     else:
         return redirect(profile, notification.sender.username)
 
+def friend(request):
+    friends = Friendship.objects.filter(friends=request.user).all()
+    for friend in friends:
+        print(friend.cur_user.username)
+    return render(request,'chat/friend.html' ,{"friends":friends})
