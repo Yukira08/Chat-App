@@ -131,7 +131,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         #room_cache.save()
         room_cache.participants.add(self.scope['user'])
         room_cache.save()
-        print(room_cache.participants.all())
+        #print(room_cache.participants.all())
 
     @database_sync_to_async
     def participants_cache_delete(self, room_id):
@@ -144,4 +144,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
         #room_cache.save()
         room_cache.participants.remove(self.scope['user'])
         room_cache.save()
-        print(room_cache.participants.all())
+        #print(room_cache.participants.all())

@@ -4,6 +4,7 @@ from .models import Room, Message, RoomCache, YourModelForm
 from accounts.views import friendlist
 from accounts.models import Notification, User, Friendship
 import json
+from accounts.views import profile
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core import serializers
@@ -40,6 +41,7 @@ def room(request, room_id):
     # available_room.remove(cur_room)
     f=YourModelForm()
     notifications = Notification.objects.filter(receiver = request.user)
+    unread_num = Notification.objects.filter(receiver = request.user, unread=True).count()
 
     return render(request, 'chat/room.html', {
         'room_id' : mark_safe(json.dumps(room_id)),
@@ -49,6 +51,7 @@ def room(request, room_id):
         'form': f,
         'messages' : Message.objects.filter(room = a),
         'notifications' : notifications,
+        'unread_num' : unread_num,
     })
 
 
@@ -111,9 +114,23 @@ def message_search(request, room_id):
 
 @login_required
 def load_noti(request):
-    """Returns a json response to an ajax call. (request.user is available in view)"""
-    signal = request.GET.get('signal')  # Make sure to use POST/GET correctly
+    signal = request.GET.get('signal')  
     print(signal)
-    notification = Notification.objects.filter(receiver = request.user).values()
 
-    return JsonResponse(data={"notification":list(notification)}, status=200)
+    notification = Notification.objects.filter(receiver = request.user, unread = True)
+    senders = []
+    for n in notification:
+        senders.append(n.sender.username)
+    print(notification.count())
+    return JsonResponse(data={"notification":list(notification.values()), "senders":senders}, status=200)
+
+@login_required
+def read_noti(request, noti_id):
+    notification = Notification.objects.get(id = noti_id)
+    notification.unread = False
+    notification.save()
+    if  notification.noti_type == 1:
+        return redirect(room, room_id=notification.destination)
+    else:
+        return redirect(profile, notification.sender.username)
+

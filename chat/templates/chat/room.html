@@ -36,25 +36,25 @@
             {% endfor %}
             {% endif %}
         </ul> -->
-        <div class="dropdown">
-            <button class="dropbtn">Dropdown</button>
-            <div class="dropdown-content">
-              <!-- <a href="#">Link 1</a>
-              <a href="#">Link 2</a>
-              <a href="#">Link 3</a> -->
-              {% if notifications %}
-              {% for notification in  notifications %}
-              {% if notification.unread and notification.noti_type == 1 %}
-              <p><a href="{% url 'room' room_id=notification.destination %}"><b>New message from {{ notification.sender }}</b></a></p>
-              {% else %}
-              <p><a href="{% url 'room' room_id=notification.destination %}">New message from {{ notification.sender }}</a></p>
-              {% endif %}
-              {% endfor %}
-              {% endif %}
-            </div>
-          </div>
 
 		<div class="container-fluid h-100">
+            <div class="dropdown">
+                <button class="dropbtn" id = "notibtn">Notification {{ unread_num }}</button>
+                <div class="dropdown-content">
+                  <!-- <a href="#">Link 1</a>
+                  <a href="#">Link 2</a>
+                  <a href="#">Link 3</a> -->
+                  {% if notifications %}
+                  {% for notification in  notifications %}
+                  {% if notification.unread and notification.noti_type == 1 %}
+                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
+                  {% else %}
+                  <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>
+                  {% endif %}
+                  {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
 			<div class="row justify-content-center h-100">
 				<div class="col-md-0 h-100 chat mt-4">
 					<div class="nav ">
@@ -236,12 +236,14 @@
   padding: 16px;
   font-size: 16px;
   border: none;
+
 }
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
   position: relative;
   display: inline-block;
+
 }
 
 /* Dropdown Content (Hidden by Default) */
@@ -266,15 +268,14 @@
 .dropdown-content a:hover {background-color: #ddd;}
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content { display : block; max-height: 500px;
+  overflow:scroll; }
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
 
-
-
-
 </style>
+
 <script>
     var fi='';
     function init(){
@@ -444,22 +445,22 @@
     success: function (data) {
         if (data) {
             var cur_time = new Date(Date.now() - 5000);
+            document.getElementById("notibtn").innerHTML = 'Notification' + ' ' + data["notification"].length;
+
+            console.log(document.getElementsByClassName("dropbtn").innerHTML);
             var ancestor =document.getElementsByClassName("dropdown-content");
             for(var i = 0; i < data["notification"].length; i++){
                 var noti_time = Date.parse(data["notification"][i].time); 
                 //console.log(noti_time);
-                if(noti_time > cur_time) { 
-                    // console.log(data["notification"].destination);
-                    // ancestor.innerHTML += "<p>New message<p>";
-                    var room_url = "{% url 'room' 1234 %}".replace(/1234/, data["notification"][i].destination );
-                    //console.log("running");
-                    //sender = data["notification"][i].sender.username
+                if(noti_time > cur_time) {
+                    //console.log("received"); 
+                    var room_url = "{% url 'read_noti' 1234 %}".replace(/1234/, data["notification"][i].id );
+                    //console.log(data["senders"][i]);
+                    var sender = data["senders"][i];
+                    //console.log(sender);
                     p = document.createElement("p");
-                    p.innerHTML = "<a href=" + room_url + "><b>" + "New message " + "</b></a>";
-                    ancestor[0].prepend(p);
-                    //ancestor.innerHTML = "<p> i am p tag<p>" + ancestor.innerHTML;
-                    //document.getElementsByClassName("dropdown-content").innerHTML = '<p>new paragraph</p>' + document.getElementsByClassName("dropdown-content").innerHTML;
-                    
+                    p.innerHTML = "<a href=" + room_url + "><b>" + "New message from " + sender + "</b></a>";
+                    ancestor[0].prepend(p);  
                 }
             }
         }
