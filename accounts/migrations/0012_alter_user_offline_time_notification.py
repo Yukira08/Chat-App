@@ -7,8 +7,11 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
+    # dependencies = [
+    #     ('accounts', '0011_alter_user_offline_time'),
+    # ]
     dependencies = [
-        ('accounts', '0011_alter_user_offline_time'),
+        ('accounts', '0012_alter_user_offline_time_notification'),
     ]
 
     operations = [
@@ -28,3 +31,10 @@ class Migration(migrations.Migration):
             ],
         ),
     ]
+    # operations = [
+    #     migrations.AlterField(
+    #         model_name='user',
+    #         name='offline_time',
+    #         field=models.TimeField(default=datetime.datetime(2022, 1, 8, 10, 28, 54, 346572)),
+    #     ),
+    # ]
