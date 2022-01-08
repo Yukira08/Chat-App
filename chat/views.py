@@ -1,10 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.safestring import mark_safe
-from .models import Room, Message, YourModelForm
+from .models import Room, Message, RoomCache, YourModelForm
 from accounts.views import friendlist
-from accounts.models import User, Friendship
+from accounts.models import Notification, User, Friendship
 import json
+from accounts.views import profile
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.core import serializers
+import json
 
 # Create your views here.
 
@@ -36,14 +40,18 @@ def room(request, room_id):
     available_room=Room.objects.filter(participants=request.user)
     # available_room.remove(cur_room)
     f=YourModelForm()
+    notifications = Notification.objects.filter(receiver = request.user)
+    unread_num = Notification.objects.filter(receiver = request.user, unread=True).count()
+
     return render(request, 'chat/room.html', {
-        'room_name_json': mark_safe(json.dumps(a.name)),
         'room_id' : mark_safe(json.dumps(room_id)),
         'messages' : mark_safe(json.dumps(messages)),
         'chat_rooms':available_room,
         'this_room' : room_id,
         'form': f,
         'messages' : Message.objects.filter(room = a),
+        'notifications' : notifications,
+        'unread_num' : unread_num,
     })
 
 
@@ -76,6 +84,9 @@ def create_room(request):
             a = User.objects.get(username=friend)
             new_room.participants.add(a)
         new_room.save()
+
+        #room_cache = RoomCache.objects.create(room = new_room)
+        #room_cache.save()
         return redirect(room, room_id=new_room.id)
 
     return redirect(error)
@@ -101,5 +112,25 @@ def message_search(request, room_id):
         return redirect(error)
 
 
+@login_required
+def load_noti(request):
+    signal = request.GET.get('signal')  
+    print(signal)
 
-    
+    notification = Notification.objects.filter(receiver = request.user, unread = True).order_by('-time')
+    senders = []
+    for n in notification:
+        senders.append(n.sender.username)
+    print(notification.count())
+    return JsonResponse(data={"notification":list(notification.values()), "senders":senders}, status=200)
+
+@login_required
+def read_noti(request, noti_id):
+    notification = Notification.objects.get(id = noti_id)
+    notification.unread = False
+    notification.save()
+    if  notification.noti_type == 1:
+        return redirect(room, room_id=notification.destination)
+    else:
+        return redirect(profile, notification.sender.username)
+
