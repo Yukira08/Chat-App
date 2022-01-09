@@ -22,6 +22,11 @@
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 		<link rel="stylesheet" href="{% static 'css/chat.css'%}">
 		<!-- <link rel="stylesheet" href="{% static 'js/room.js'%}"> -->
+        <style>
+            .bottom{
+                text-align: bottom;
+            }
+        </style>
     </head>
 	<body>
 
@@ -107,8 +112,8 @@
                                     {% endif %}
                                 </div>
                             </li>
-                            <li class="nav-link">
-                            <a href="#" class="nav-item"><i class="fas fa-sign-out-alt fa-2x"></i></a>
+                            <li class="nav-item">
+                                <a href="{% url 'logout'%}" class="nav-link bottom"><i class="fas fa-sign-out-alt fa-2x"></i></a>
                             </li>
 						</ul>
 					</div>
@@ -212,7 +217,9 @@
                                     {% csrf_token %}
                                     {{form.media}}
                                     {{form.short_text}}
-                                    
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text emoji">&nbsp;&nbsp;</span>
+                                    </div>
                                     <div class="input-group-append">
                                         <button class="btn btn-secondary" id="chat-message-submit" type="submit" value = "Send">
                                             <span class="input-group-text send_btn">
@@ -287,7 +294,7 @@
         var sending=document.getElementsByClassName("input-group-text attach_btn")[0];
         sending.appendChild(attach); 
         var inputdiv = document.getElementsByClassName("dep-container")[0];
-        inputdiv.className="input-group-append";
+        inputdiv.className="input-group-append form-control input_div";
         var inputtext=document.getElementById("id_short_text");
         inputtext.className="form-control type_msg";
         inputtext.placeholder="Type your message...";
