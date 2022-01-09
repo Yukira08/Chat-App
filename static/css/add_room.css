@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0
+}
+body{
+    background: #7f7fd5;
+    background: -webkit-linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
+    background: linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
+}
+
+.friend p{
+    display: inline;
+}
+
+.card{
+    width: 400px;
+    border: none;
+    border-radius: 10px;
+}
+.header{
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+}
+p {
+ padding: 10px;    
+}
+
+.create{
+    text-align: center;
+}
