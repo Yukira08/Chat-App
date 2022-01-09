@@ -156,8 +156,8 @@ ASGI_APPLICATION = 'config.asgi.application'
 #     },
 # }
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
 
 CHANNEL_LAYERS = {
     'default': {
@@ -172,7 +172,7 @@ CHANNEL_LAYERS = {
 CSRF_TRUSTED_ORIGINS = ['https://iniad-kapter.herokuapp.com']
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'index'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
