@@ -148,24 +148,29 @@
                             <!------- messages ------->
                             {% for message in messages %}
                             {% if message.sender == user %}
+                            
                             <div class="d-flex mb-4 replied">
+                                
 								<div class="msg_cotainer_send">
-									{{ message.message}}
-									<span class="msg_time_send">8:55 AM, Today</span>
+                                    <span class="msg_time">{{ message.date }}</span>
+									<span class="msg_content">{{ message.message}}</span>
+									
 								</div>
 								<div class="img_cont_msg">
 							<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"class="rounded-circle user_img_msg">
 								</div>
 							</div>
                             {% else %}
+                            
                             <div class="d-flex mb-4 received">
 								<div class="img_cont_msg">
 									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
 								</div>
-
+                                
 								<div class="msg_cotainer">
-									{{ message.message}}
-									<span class="msg_time">8:40 AM, Today</span>
+                                    <span class="msg_time">{{ message.date }}</span>
+									<span class="msg_content">{{ message.message}}</span>
+									
 								</div>
 							</div>
                             {% endif %}
@@ -327,7 +332,7 @@
         reader.readAsArrayBuffer(file);
     }
     var chatSocket = new WebSocket(
-        'wss://' + window.location.host + '/ws/chat/' + room_id + '/');
+        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
         // var prevmes = {{messages}};
@@ -365,16 +370,28 @@
     };
 
     function submitFunction() {
-        var searchInput = document.querySelector("#search-input");
-        var ancestor = document.getElementById('chat-log');
-        var descendents = ancestor.getElementsByTagName('p');
-        for (var i = 0; i < descendents.length; i++){
-            descendents[i].innerHTML = descendents[i].innerHTML.replace(
-                new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
+        // var searchInput = document.querySelector("#search-input");
+        // var ancestor = document.getElementById('chat-log');
+        // var descendents = ancestor.getElementsByTagName('p');
+        // for (var i = 0; i < descendents.length; i++){
+        //     descendents[i].innerHTML = descendents[i].innerHTML.replace(
+        //         new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
+        //         '<b style="background-color:#ff0;font-size:100%">$&</b>'
+        //     );
+        // }
+        // searchInput.value = '';
+
+        var div = document.getElementsByClassName("msg_content");
+        for (var i = 0; i < div.length; i++){
+            console.log(div[i].innerHTML);
+            div[i].innerHTML = div[i].innerHTML.replace(
+                new RegExp('hi' + '(?!([^<]+)?<)', 'gi'),
                 '<b style="background-color:#ff0;font-size:100%">$&</b>'
             );
         }
-        searchInput.value = '';
+
+
+        console.log(div);
     }
 
     document.querySelector('#chat-message-submit').onclick = function(e) {
