@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="{% static 'css/chat.css'%}">
     <link rel="stylesheet" href="{% static 'js/room.js'%}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body onload="init()">
     {% load static %}
@@ -23,7 +24,54 @@
 		<link rel="stylesheet" href="{% static 'js/room.js'%}">
     </head>
 	<body>
+                        
+        <!-- <ul class="notifications">
+            {% if notifications %}
+            {% for notification in  notifications %}
+            {% if notification.unread and notification.noti_type == 1 %}
+            <p><a href="{% url 'room' room_id=notification.destination %}"><b>New message from {{ notification.sender }}</b></a></p>
+            {% else %}
+            <p><a href="{% url 'room' room_id=notification.destination %}">New message from {{ notification.sender }}</a></p>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </ul> -->
+
 		<div class="container-fluid h-100">
+            <div class="dropdown">
+                <button class="dropbtn" id = "notibtn">Notification {{ unread_num }}</button>
+                <div class="dropdown-content">
+                  <!-- <a href="#">Link 1</a>
+                  <a href="#">Link 2</a>
+                  <a href="#">Link 3</a> -->
+                  {% if notifications %}
+                  {% for notification in  notifications %}
+                    {% if notification.noti_type == 1 %}
+                    {% if notification.unread %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
+                    {% else %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>  
+                    {% endif %}
+
+                    {% elif notification.noti_type == 2 %}
+                    {% if notification.unread %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New friend request from {{ notification.sender }}</b></a></p>
+                    {% else %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}">New friend request from {{ notification.sender }}</a></p>  
+                    {% endif %}
+
+                    {% elif notification.noti_type == 3 %}
+                    {% if notification.unread %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>request accepted by {{ notification.sender }}</b></a></p>
+                    {% else %}
+                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"> request accepted by {{ notification.sender }}</a></p>  
+                    {% endif %}
+                    
+                  {% endif %}
+                  {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
 			<div class="row justify-content-center h-100">
 				<div class="col-md-0 h-100 chat mt-4">
 					<div class="nav ">
@@ -39,11 +87,12 @@
 							</li>
 							<li class="nav-item">
 							<a class="nav-link" href="#"> <i class="fas fa-user-plus fa-2x"></i></a>
-							</li>
+							</li> 
 						</ul>
 					</div>
 				</div>
-				<div class="col-md-3 col-xl-3  margin chat h-100 mt-4">
+
+                <div class="col-md-3 col-xl-3  margin chat h-100 mt-4">
                     <div class="card  mb-sm-3 mb-md-0 contacts_card">
 					<div class="card-header">
 						<div class="input-group">
@@ -194,8 +243,56 @@
     <div id="test-file">
 <p>This place</p>
     </div> -->
-
+    <!-- <p>{{ user.id|json_script:"user_id" }}</p> -->
 </body>
+<style>
+    /* Dropdown Button */
+.dropbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content { display : block; max-height: 500px;
+  overflow:scroll; }
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+</style>
+
 <script>
     var fi='';
     function init(){
@@ -212,7 +309,8 @@
         inputtext.placeholder="Type your message...";
     }
     var room_id = {{ room_id }};
-    var roomName = {{ room_name_json }};
+    //const user_id = JSON.parse(document.getElementById('user_id').textContent);
+    //var roomName = {{ room_name_json }};
     console.log(document.getElementById('id_short_text').value);
     function sendFile(file,message,room_id){
         var reader = new FileReader();
@@ -229,7 +327,7 @@
         reader.readAsArrayBuffer(file);
     }
     var chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
+        'wss://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
         // var prevmes = {{messages}};
@@ -238,7 +336,7 @@
 
     chatSocket.onmessage = function(e) {    
         var data = JSON.parse(e.data); var message = data['message'];
-        // console.log(data);
+        //console.log(data);
         // document.querySelector('#chat-log').value += (message);
         // var div = document.getElementById('chat-log');
         // div.innerHTML += "<p>" + message  + "<p>";
@@ -336,5 +434,57 @@
         }
             document.getElementsByClassName('card-body msg_card_body')[0].appendChild(showlink);
     }
+
+    function getCookie(name) {
+    var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+      }
+     return cookieValue;
+      }
+    var csrftoken = getCookie('csrftoken');
+    setInterval(function(){ 
+      //console.log("load notification is running");
+    $.ajax({
+    url: "{% url 'load_noti'%}",
+    headers: {'X-CSRFToken': csrftoken},
+    data: {'signal': "send success"},
+    type: "GET",
+    dataType: 'json',
+    success: function (data) {
+        if (data) {
+            var cur_time = new Date(Date.now() - 5000);
+            document.getElementById("notibtn").innerHTML = 'Notification' + ' ' + data["notification"].length;
+
+            console.log(document.getElementsByClassName("dropbtn").innerHTML);
+            var ancestor =document.getElementsByClassName("dropdown-content");
+            for(var i = 0; i < data["notification"].length; i++){
+                var noti_time = Date.parse(data["notification"][i].time); 
+                //console.log(noti_time);
+                if(noti_time > cur_time) {
+                    //console.log("received"); 
+                    var room_url = "{% url 'read_noti' 1234 %}".replace(/1234/, data["notification"][i].id );
+                    //console.log(data["senders"][i]);
+                    var sender = data["senders"][i];
+                    //console.log(sender);
+                    p = document.createElement("p");
+                    p.innerHTML = "<a href=" + room_url + "><b>" + "New message from " + sender + "</b></a>";
+                    ancestor[0].prepend(p);  
+                }
+            }
+        }
+      }
+    });
+  }, 5000);
+
+
 </script>
 </html>

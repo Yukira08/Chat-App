@@ -1,6 +1,45 @@
 <html lang="ja"><head><meta charset="utf-8"></head>
-  <body>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+<body>
     <h1>Private</h1>
     <p>Super secret contents</p>
   </body>
+
+  <script>
+    function getCookie(name) {
+    var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+      }
+     return cookieValue;
+      }
+    var csrftoken = getCookie('csrftoken');
+    setInterval(function(){ 
+      console.log("running");
+    $.ajax({
+    url: "{% url 'doing-something' %}",
+    headers: {'X-CSRFToken': csrftoken},
+    data: {'some_attribute': "send success"},
+    type: "GET",
+    dataType: 'json',
+    success: function (data) {
+        if (data) {
+            console.log(data);
+            // call function to do something with data
+            //process_data_function(data);
+        }
+      }
+    });
+  }, 5000);
+</script>
 </html>
