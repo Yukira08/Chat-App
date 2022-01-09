@@ -166,13 +166,22 @@
 						<div class="card-body msg_card_body">
                             <!------- messages ------->
                             {% for message in messages %}
-                            {% if message.message != "" %}
                             {% if message.sender == user %}
                             <div class="d-flex mb-4 replied">
+                                
 								<div class="msg_cotainer_send">
+                                    {% if message.message != "" %}
 									{{ message.message}}
-									<span class="msg_time_send">8:55 AM, Today</span>
+                                    {% else %}
+                                    {% if message.filename|slice:"-3::" in "jpgpnggif"  %}
+                                    <img class="card-img-top"src={{message.path}}>
+                                    {% else %}
+                                    <a href={{message.path}}>{{message.filename}}</a>
+                                    {% endif %}
+                                    {% endif %}
+									<span class="msg_time_send">{{message.date | date:"g A, d" }}</span>
 								</div>
+                                
 								<div class="img_cont_msg">
 							<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"class="rounded-circle user_img_msg">
 								</div>
@@ -184,11 +193,14 @@
 								</div>
 
 								<div class="msg_cotainer">
+                                    {% if message.message != "" %}
 									{{ message.message}}
+                                    {% else %}
+                                    <img src={{message.path}}>
+                                    {% endif %}
 									<span class="msg_time">8:40 AM, Today</span>
 								</div>
 							</div>
-                            {% endif %}
                             {% endif %}
                             {% endfor %}
 
@@ -242,8 +254,6 @@
 
     <input id="search-input" type="text" placeholder="Search"/> -->
     <button onclick= "window.submitFunction()">Submit</button>
-    <input type="hidden" id="myVar" name="variable" value="{{ messages.0 }}">
-    <p>    {{messages.0|json_script:"hello-data"}}</p>
 
     <!-- {% csrf_token %}
 
@@ -275,9 +285,9 @@
 <script>
     var fi='';
     function init(){
-        console.log(JSON.parse(document.getElementById('hello-data').textContent));
-        var myVar = document.getElementById("myVar").value;
-        console.log(myVar);
+        // console.log(JSON.parse(document.getElementById('hello-data').textContent));
+        // var myVar = document.getElementById("myVar").value;
+        // console.log(myVar);
         var attach=document.createElement("input");
         attach.type="file";
         attach.id="filename";
@@ -327,14 +337,14 @@
         
         console.log(data);
         if(message!=''){
-        msging(data);}
+        msging(data,0);}
         if (data['location']!=''){
             console.log("there is location");
             if (data['filetype'].includes('image',0)){
-                imagefile(data);
+                msging(data,1);
             }
             else{
-                nomiefile(data);
+                msging(data,2);
             }
 
         }
@@ -379,38 +389,7 @@
         }
         messageInputDom.value = '';
     };
-    function nomiefile(data){
-        var showlink=document.createElement("a");
-            showlink.href=data['location'];
-            showlink.innerText=data['filename'];
-            showlink.download=data['filename'];
-            document.getElementById("test-file").appendChild(showlink);
-    }
-    function imagefile(data){        
-        const predef=[["d-flex mb-4 replied", "msg_cotainer_send","msg_time_send"],["d-flex mb-4 received", "msg_cotainer","msg_time"],["img_cont_msg","rounded-circle user_img_msg"]];
-        var showimg=document.createElement("img");
-            showimg.src=data['location'];
-        var icon=document.createElement("div");
-            icon.className=predef[2][0];
-        var immg=document.createElement("img");
-            immg.className=predef[2][1];
-            immg.src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg";
-        icon.appendChild(immg);
-        var m=0;
-        var msg = document.createElement("div");
-            msg.className=predef[m][1];
-            msg.appendChild(showimg);
-        var msgtime = document.createElement("div");
-            msgtime.className=predef[m][2];
-            msgtime.innerText="8:40 AM, Today";
-        msg.appendChild(msgtime);
-        var showlink=document.createElement("div");
-            showlink.className=predef[m][0];
-            showlink.appendChild(msg); 
-            showlink.appendChild(icon); 
-            document.getElementsByClassName('card-body msg_card_body')[0].appendChild(showlink);
-    }
-    function msging(data){
+    function msging(data,kind){
         const predef=[["d-flex mb-4 replied", "msg_cotainer_send","msg_time_send"],["d-flex mb-4 received", "msg_cotainer","msg_time"],["img_cont_msg","rounded-circle user_img_msg"]];
         var icon=document.createElement("div");
             icon.className=predef[2][0];
@@ -424,7 +403,21 @@
         }
         var msg = document.createElement("div");
             msg.className=predef[m][1];
-            msg.innerText=data["message"];
+            if (kind == 0){ // message
+            msg.innerText=data["message"];}
+            else if (kind == 1){ //image
+            var showimg=document.createElement("img");
+            showimg.src=data['location'];
+            showing.className="card-img-top";
+            msg.appendChild(showimg);
+            }
+            else {
+            var showf=document.createElement("a");
+            showf.href=data['location'];
+            showf.innerText=data['filename'];
+            showf.download=data['filename'];
+            msg.appendChild(showf);
+            }
         var msgtime = document.createElement("div");
             msgtime.className=predef[m][2];
             msgtime.innerText="8:40 AM, Today";
