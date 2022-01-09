@@ -270,16 +270,16 @@ html {
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.msg_card_body,.card-body,.dropdown-content::-webkit-scrollbar {
+.msg_card_body::-webkit-scrollbar {
   display: none;
 }
 
+
 /* Hide scrollbar for IE, Edge and Firefox */
-.msg_card_body, .card-body{
+.msg_card_body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
-
 .messages-wrapper{
   height: 100%;
 }

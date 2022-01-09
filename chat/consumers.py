@@ -119,7 +119,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # a=Message.objects.create(sender=self.scope['user'],message=message)
         # a.save()
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({'usrname': usrname,'message':message,'location': location,"filetype":filetype,'filename':filename}))
+        await self.send(text_data=json.dumps({'rq':self.scope['user'].username, 'usrname': usrname,'message':message,'location': location,"filetype":filetype,'filename':filename}))
 
     @database_sync_to_async
     def participants_cache_add(self, room_id):

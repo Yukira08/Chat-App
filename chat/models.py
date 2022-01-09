@@ -6,6 +6,7 @@ from datetime import datetime
 from django.conf import settings
 from django.db.models.deletion import CASCADE
 from django import forms
+import json
 from emoji_picker.widgets import EmojiPickerTextInput, EmojiPickerTextarea
 
 # from django.contrib.auth.models import User
@@ -25,6 +26,8 @@ class Message(models.Model): #Change to Message
     message=models.CharField(max_length=1000,null=True)
     filename=models.CharField(max_length=100,null=True)
     path=models.CharField(max_length=500,null=True)
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 class YourModelForm(forms.ModelForm):
     short_text = forms.CharField(widget=EmojiPickerTextInput)
