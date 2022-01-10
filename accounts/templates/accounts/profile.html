@@ -90,7 +90,7 @@
             <input class ="d-none" id="room_id" name="room_id" value="{{room_id}}">
             <input class ="d-none" id="room-name-input" name="room_name" value="{{user.username}}{{per}}">
             <input class ="d-none" name="friends" id="{{user.username}}" value = "{{user.username}}">
-            <button type="submit" class="btn btn-secondary">Create</button>
+            <button type="submit" class="btn btn-secondary">Direct message</button>
           </form>
           <a href="{% url 'unfriend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} UnFriend</a>
           <a class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} &nbsp;Friends</a>

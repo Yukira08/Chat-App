@@ -15,7 +15,7 @@ from datetime import datetime
 
 def login(request):
     if request.user.is_authenticated:
-        return redirect(index)
+        return redirect('index')
     return render(request, 'accounts/login.html')
 
 def signup(request):

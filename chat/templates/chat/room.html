@@ -262,52 +262,13 @@
 		</div>
 	</body>
 </html>
-    <!-- <div>
-        <p>Friendlist</p>
-        {% if chat_rooms %}
-        <ul>
-          {% for chat_room in chat_rooms %}
-          {% if chat_room.id != this_room %}
-        <li><a href="{% url 'room' room_id=chat_room.id %}">{{ chat_room.name }}</a></li>
-        
-        {% endif %}
-        {% endfor %}
-        </ul>
-        {% else %}
-        <p> No chat room</p>
-        {% endif %}
-    </div>
-
-    <input id="search-input" type="text" placeholder="Search"/> -->
-    <!-- <button onclick= "window.submitFunction()">Submit</button> -->
-    <!-- {% csrf_token %}
 
     
-    <form action="{% url 'message_search' room_id=this_room %}" method="post">
-        {% csrf_token %}
-        <label for="search_input">Your name: </label>
-        <input id="search_input" type="text" name="search_input" placeholder="search for messages in this room">
-        <input type="submit" value="Search">
-    </form> -->
-   
-    <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br/> -->
-    
-    <!-- {% csrf_token %}
-    {{form.media}}
-    {{form.short_text}}
-
-    <div id="Send">
-        <input id="chat-message-submit" type="button" value="Send"/>
-    </div>
-
-    <div id="test-file">
-<p>This place</p>
-    </div> -->
-    <!-- <p>{{ user.id|json_script:"user_id" }}</p> -->
 </body>
 
-<li><a id="test" goto="119" style="color: white;">{{ chat_rooms.119.name }} TEST</a></li>
-						
+
+
+
 <script>
     // ---test code start --- \\
     $('#test').click(function(){
@@ -325,7 +286,7 @@
             }
         })
     })
-    // ---test code end--- \\
+
     var fi='';
     function init(){
         // console.log(JSON.parse(document.getElementById('hello-data').textContent));
@@ -380,7 +341,7 @@
         // div.innerHTML += "<p>" + message  + "<p>";
         
         console.log(data);
-        if(message!=''){
+        if(message!=''&&data['location']==''){
         msging(data,0);}
         if (data['location']!=''){
             console.log("there is location");
@@ -492,7 +453,7 @@
             var file = document.getElementById('filename').files[0];
             sendFile(file,message,room_id);
         }
-        if(message!=''){
+        if(message!=''&&fi==''){
             chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id}));
         }
         messageInputDom.value = '';
@@ -511,8 +472,10 @@
         }
         var msg = document.createElement("div");
             msg.className=predef[m][1];
+        var showmsg=document.createElement("div");
+            msg.appendChild(showmsg);
             if (kind == 0){ // message
-            msg.innerText=data["message"];}
+            showmsg.innerText=data["message"];}
             else if (kind == 1){ //image
             var showimg=document.createElement("img");
             showimg.src=data['location'];
