@@ -557,38 +557,38 @@
      return cookieValue;
       }
     var csrftoken = getCookie('csrftoken');
-    setInterval(function(){ 
-    $.ajax({
-    url: "{% url 'load_noti'%}",
-    headers: {'X-CSRFToken': csrftoken},
-    data: {'signal': "send success"},
-    type: "GET",
-    dataType: 'json',
-    success: function (data) {
-        if (data) {
-            var cur_time = new Date(Date.now() - 5000);
-            document.getElementById("notibtn").innerHTML =  data["notification"].length;
+//     setInterval(function(){ 
+//     $.ajax({
+//     url: "{% url 'load_noti'%}",
+//     headers: {'X-CSRFToken': csrftoken},
+//     data: {'signal': "send success"},
+//     type: "GET",
+//     dataType: 'json',
+//     success: function (data) {
+//         if (data) {
+//             var cur_time = new Date(Date.now() - 5000);
+//             document.getElementById("notibtn").innerHTML =  data["notification"].length;
 
-            //console.log(document.getElementsByClassName("dropbtn").innerHTML);
-            var ancestor =document.getElementsByClassName("dropdown-content");
-            for(var i = 0; i < data["notification"].length; i++){
-                var noti_time = Date.parse(data["notification"][i].time); 
-                //console.log(noti_time);
-                if(noti_time > cur_time) {
-                    //console.log("received"); 
-                    var room_url = "{% url 'read_noti' 1234 %}".replace(/1234/, data["notification"][i].id );
-                    //console.log(data["senders"][i]);
-                    var sender = data["senders"][i];
-                    //console.log(sender);
-                    p = document.createElement("p");
-                    p.innerHTML = "<a href=" + room_url + "><b>" + "New message from " + sender + "</b></a>";
-                    ancestor[0].prepend(p);  
-                }
-            }
-        }
-      }
-    });
-  }, 5);
+//             //console.log(document.getElementsByClassName("dropbtn").innerHTML);
+//             var ancestor =document.getElementsByClassName("dropdown-content");
+//             for(var i = 0; i < data["notification"].length; i++){
+//                 var noti_time = Date.parse(data["notification"][i].time); 
+//                 //console.log(noti_time);
+//                 if(noti_time > cur_time) {
+//                     //console.log("received"); 
+//                     var room_url = "{% url 'read_noti' 1234 %}".replace(/1234/, data["notification"][i].id );
+//                     //console.log(data["senders"][i]);
+//                     var sender = data["senders"][i];
+//                     //console.log(sender);
+//                     p = document.createElement("p");
+//                     p.innerHTML = "<a href=" + room_url + "><b>" + "New message from " + sender + "</b></a>";
+//                     ancestor[0].prepend(p);  
+//                 }
+//             }
+//         }
+//       }
+//     });
+//   }, 5000);
     function userSearch(){
         var searchInput = document.getElementsByClassName("form-control search");
         //console.log(searchInput[0].value);
