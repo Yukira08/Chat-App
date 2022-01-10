@@ -332,8 +332,8 @@
         var inputtext=document.getElementById("id_short_text");
         inputtext.className="form-control type_msg";
         inputtext.placeholder="Type your message...";
-        var element = document.getElementsByClassName("d-flex mb-4");
-        element[element.length-1].scrollIntoView(false);
+        var element = document.getElementsByClassName("card-body msg_card_body")[0];
+        element.scrollTop=element.scrollHeight;
     }
     var room_id = {{ room_id }};
     //const user_id = JSON.parse(document.getElementById('user_id').textContent);
