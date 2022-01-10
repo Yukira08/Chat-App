@@ -371,7 +371,7 @@
         reader.readAsArrayBuffer(file);
     }
     var chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
+        'wss://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
         // var prevmes = {{messages}};
