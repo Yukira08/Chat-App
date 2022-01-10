@@ -2,10 +2,9 @@ body,
 html {
   height: 100%;
   margin: 0;
-  background-color: #91eae4;
-  /* background: #7f7fd5;
+  background: #7f7fd5;
   background: -webkit-linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
-  background: linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5); */
+  background: linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
 }
 
 .chat {
@@ -15,6 +14,8 @@ html {
 .nav{
     border-top-right-radius: 0px !important;
     border-bottom-right-radius: 0px !important;
+    border-top-left-radius :5px;
+    border-bottom-left-radius :5px;
     background-color: rgba(0, 0, 0, 0.4) !important;
     height: 95%;
 }
@@ -44,7 +45,7 @@ html {
 }
 .msg_card_body {
   overflow-y: auto;
-  max-height: 65%;
+  max-height: 80%;
   padding-bottom: 20px;
 }
 .card-header {
@@ -72,15 +73,22 @@ html {
   outline: 0px !important;
 }
 .type_msg {
-  background-color: rgba(0, 0, 0, 0.3) !important;
+  background-color: rgba(0, 0, 0, 0.2) !important;
   border: 0 !important;
   color: white !important;
-  height: 60px !important;
+  height: 45px !important;
   overflow-y: auto;
 }
 .type_msg:focus {
   box-shadow: none !important;
   outline: 0px !important;
+}
+.input_div{
+  padding:0;
+  margin:0;
+  border:0;
+  background-color:rgba(0, 0, 0, 0.1) !important;
+  height:45px;
 }
 .attach_btn {
   border-radius: 15px 0 0 15px !important;
@@ -88,6 +96,12 @@ html {
   border: 0 !important;
   color: white !important;
   cursor: pointer;
+}
+.emoji{
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  border: 0 !important;
+  color: white !important;
+  text-align: center;
 }
 .send_btn {
   border-radius: 0 15px 15px 0 !important;
@@ -102,6 +116,9 @@ html {
   border: 0 !important;
   color: white !important;
   cursor: pointer;
+}
+.search_msg{
+  float: right !important;
 }
 .contacts {
   list-style: none;
@@ -273,7 +290,7 @@ html {
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
-.msg_card_body {
+.msg_card_body{
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -291,4 +308,66 @@ html {
     position: absolute;
     width: 1px;
 }
+.nav-link i:hover{
+  color:black;
+}
+.notification{
+  position: relative !important;
+}
 
+.notification i:hover{
+  color: black;
+}
+
+.badge{
+  position: absolute;
+  top: -1px;
+  right: -7px;
+  padding: 5px 5px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+
+}
+
+.dropbtn {
+  color: white;
+  /* padding: 16px; */
+  border: none;
+
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  border-radius: 15px;
+  position: absolute;
+  background-color: rgb(241, 241, 241);
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content { display : block; max-height: 500px;
+  overflow:scroll; }
+
+/* Change the background color of the dropdown button when the dropdown content is shown */

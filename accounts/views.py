@@ -35,10 +35,12 @@ def friendlist(username):
 def profile(request,username):
     friendnames = friendlist(request.user.username)
     if request.method=='POST':
+        print("Change pic")
         img_form=ProfileUpdateForm(request.POST,request.FILES,instance=request.user)
         if img_form.is_valid():
             img_form.save()
             messages.success(request,'Profile picture updated')
+            print("Change done")
             return redirect('profile',username=request.user.username)
     else:
         img_form=ProfileUpdateForm(instance=request.user)
@@ -46,6 +48,7 @@ def profile(request,username):
     friendnames = []
     friend_number = 0
     inst=User.objects.get(username=username)
+    print(inst.img.url)
     data['user']=inst
     data['img_form']=img_form
     Friendship.objects.filter(friends=inst)

@@ -1,33 +1,41 @@
-<html lang="ja"><head><meta charset="utf-8"></head>
-  <body>
-    <h1>Home</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Home</h1>
 
-    {% if user.is_authenticated %}
-    <p>Hi <a href={% url 'profile' username=user.username %}>{{ user.username }}</a>!</p>
-    <a href="{% url 'logout' %}">logout</a>
-    <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
-    {% else %}
-    <p>You are not logged in.</p>
-    <p><a href="{% url 'login' %}">login</a></p>
-    <p><a href="{% url 'signup' %}">signup</a></p>
-    {% endif %}
-    
+  {% if user.is_authenticated %}
+  <p>Hi <a href="{% url 'profile' username=user.username %}">{{ user.username }}</a>!</p>
+  <a href="{% url 'logout' %}">logout</a>
+  <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
+  {% else %}
+  <p>You are not logged in.</p>
+  <p><a href="{% url 'login' %}">login</a></p>
+  <p><a href="{% url 'signup' %}">signup</a></p>
+  {% endif %}
 
-    <p> Wanna search for another users ?</p>
-    <form action="{% url 'friend_search' %}" method="post">
-      {% csrf_token %}
-      <label for="search_input">username: </label>
-      <input id="search_input" type="text" name="search_input" placeholder="search for another users">
-      <input type="submit" value="Search">
-    </form>
+  <p> Wanna search for another users ?</p>
+  <form action="{% url 'friend_search' %}" method="post">
+    {% csrf_token %}
+    <label for="search_input">username: </label>
+    <input id="search_input" type="text" name="search_input" placeholder="search for another users">
+    <input type="submit" value="Search">
+  </form>
 
-    <!--p><a href="{% url 'index' %}">create chat room</a></p-->
-    
-    <p><a href="{% url 'add_room' %}"> add chat room</a></p>
+  <!--p><a href="{% url 'index' %}">create chat room</a></p-->
+  
+  <p><a href="{% url 'add_room' %}"> add chat room</a></p>
 
 
-    <hr>
-    <p><a href="{% url 'priv' %}">priv</a></p>
-    <p><a href="{% url 'pub' %}">public</a></p>
+  <hr>
+  <p><a href="{% url 'priv' %}">priv</a></p>
+  <p><a href="{% url 'pub' %}">public</a></p>
 </body>
 </html>
+ 
+

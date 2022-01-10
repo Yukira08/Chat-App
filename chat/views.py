@@ -11,9 +11,10 @@ from django.core import serializers
 import json
 
 # Create your views here.
-
+@login_required
 def index(request):
-    return render(request, 'chat/index.html', {'friendnames':friendlist(request.user.username)})
+    recent_room=Message.objects.filter(sender=request.user).last().room.id
+    return redirect(room,room_id=recent_room)
 
 def error(request):
     return render(request, 'chat/error.html', {})
@@ -76,7 +77,12 @@ def create_room(request):
     if request.method=="POST":
         room_name = request.POST['room_name']
         friends = request.POST.getlist('friends')
-        
+        # mutualroom=Room.objects.filter(participants__username__in=friends.append(request.user.username))\
+        # .annotate(num_ptcpant=Count('participants')).filter(num_ptcpant=len(friends.append(request.user.username)))
+        mutualrooms=Room.objects.filter(participants__username__in=friends+[request.user.username])
+        for mutualroom in mutualrooms:
+            if mutualroom.participants.count() == (len(friends)+1):
+                return redirect(room,room_id=mutualroom.id)
         new_room=Room.objects.create(name=room_name)
         new_room.participants.add(request.user)
 
@@ -115,13 +121,13 @@ def message_search(request, room_id):
 @login_required
 def load_noti(request):
     signal = request.GET.get('signal')  
-    print(signal)
+    #print(signal)
 
     notification = Notification.objects.filter(receiver = request.user, unread = True).order_by('-time')
     senders = []
     for n in notification:
         senders.append(n.sender.username)
-    print(notification.count())
+    #print(notification.count())
     return JsonResponse(data={"notification":list(notification.values()), "senders":senders}, status=200)
 
 @login_required
@@ -134,3 +140,8 @@ def read_noti(request, noti_id):
     else:
         return redirect(profile, notification.sender.username)
 
+def friend(request):
+    friends = Friendship.objects.filter(friends=request.user).all()
+    # for friend in friends:
+    #     print(friend.cur_user.username)
+    return render(request,'chat/friend.html' ,{"friends":friends})

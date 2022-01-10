@@ -11,12 +11,12 @@
   <link rel="stylesheet" href="{% static 'css/profile.css'%}">
   <title>Profile</title>
   <style>
-    label{
+    /* label{
       display: none;
-    }
-    .form-group div a{
+    } */
+    /* .form-group div a{
        display: none;
-    }
+    } */
     .img_cont{
       position: relative;
       border-radius: 50%;
@@ -38,23 +38,34 @@
         <div class=" image d-flex flex-column justify-content-center align-items-center"> 
           {% if per%}
           <div class="img_cont">
-            <img src="{{user.image.url}}" class="rounded-circle user_img">
-            <div class = "img_icon"> <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              {{ img_form | crispy}}
-              <span type="submit"><i style="padding: 8px;">{% bs_icon 'camera-fill' color='black'%}</i></span>
+
+            <!-- <img src="/media/pic.jpg" class="rounded-circle user_img"> -->
+            <img src="{{user.img.url}}" class="rounded-circle user_img">
+            <div class = "img_icon"> 
+              <label class="label" for="id_img">
+              <i style="padding: 8px;" >{% bs_icon 'camera-fill' color='black'%}</i>
+            </label>
+                      <form method="post" id ="x"enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <input type="file" name="img" accept="image/*" oninput="document.getElementById('x').submit();" class="fileinput fileUpload form-control-file " id="id_img" style="visibility: hidden;">
+            </form>
+              <!-- <label for="confirm">Hello good friend</label> -->
+
+              <!-- <input id="confirm" type="submit" form="x" > -->
+
 </div>
           </div>
 
           {%else%}
           {% if online%}
           <div class="img_cont active">
-            <img src="{{user.image.url}}" class="rounded-circle user_img">
+            <img src="{{user.img.url}}" class="rounded-circle user_img">
             <span class="online_icon"></span>
           </div>
           {%else%}
 					<div class="img_cont">
-            <img src="{{user.image.url}}" class="rounded-circle user_img">
+            <img src="{{user.img.url}}" class="rounded-circle user_img">
             <span class="online_icon offline"></span>
           </div>
           <p>was online at {{ offline_time }}</p>
@@ -62,6 +73,7 @@
           {% endif %}
           <span class="name mt-3">{{user.username}}</span> 
           <span class="idd">{{user.email}}</span>
+        </div>
           {% if option%}
             {% if add_friend %}
             <a href="{% url 'add_friend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} Add Friend</a>
@@ -73,6 +85,12 @@
 
           {%else%}
           {% if not per %}
+          <form action="{% url 'create_room' %}" method = "post">
+            {% csrf_token %}
+            <input class ="d-none" id="room-name-input" name="room_name" value="{{user.username}}{{per}}">
+            <input class ="d-none" id="{{user.username}}" value = "{{user.username}}">
+            <button type="submit" class="btn btn-secondary">Create</button>
+          </form>
           <a href="{% url 'unfriend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} UnFriend</a>
           <a class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} &nbsp;Friends</a>
           {% endif %}
@@ -91,7 +109,10 @@
               <p> No friends</p>
               {% endif %}
             </div>
+
+              <!-- <button type="submit">Submit</button> -->
         </div>
+
     </div>
 </div>
 </body>
