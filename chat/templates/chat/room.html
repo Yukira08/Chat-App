@@ -153,7 +153,7 @@
 						<div class="card-header msg_head">
 							<div class="d-flex bd-highlight">
 								<div class="img_cont">
-									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+									<img src="{{user.img.url}}" class="rounded-circle user_img">
 									<span class="online_icon"></span>
 								</div>
                                 {% if chat_room.id != this_room %}
@@ -203,13 +203,13 @@
 								</div>
                                 
 								<div class="img_cont_msg">
-							<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"class="rounded-circle user_img_msg">
+							<img src="{{user.img.url}}"class="rounded-circle user_img_msg">
 								</div>
 							</div>
                             {% else %}
                             <div class="d-flex mb-4 received">
 								<div class="img_cont_msg">
-									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+									<img src="{{message.sender.img.url}}" class="rounded-circle user_img_msg">
 								</div>
 
 								<div class="msg_cotainer">
@@ -503,7 +503,7 @@
             icon.className=predef[2][0];
         var immg=document.createElement("img");
             immg.className=predef[2][1];
-            immg.src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg";
+            immg.src=data["pic"];
         icon.appendChild(immg);
         var m=0;
         if (data["usrname"]!=data["rq"]){

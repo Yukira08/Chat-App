@@ -52,11 +52,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if filename!=None:
             getpath=str(settings.MEDIA_URL)+'upload/'+str(room_id)+'/'+time.strftime("%Y%m%d%H%M%S%f")+filename
         user=self.scope['user']
-
+        
         # Send message to room group  
         await self.channel_layer.group_send(
             self.room_group_name,
-            { 'type': 'chat_message', 'usrname': user.username,'message':message,'location': getpath,'filetype':filetype,'filename':filename}
+            { 'type': 'chat_message', 'usrname': user.username,'pic':user.img.url,'message':message,'location': getpath,'filetype':filetype,'filename':filename}
         )    
 
     @database_sync_to_async
@@ -116,10 +116,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         location=event["location"]
         filetype=event["filetype"]
         filename=event["filename"]
+        pic=event["pic"]
         # a=Message.objects.create(sender=self.scope['user'],message=message)
         # a.save()
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({'rq':self.scope['user'].username, 'usrname': usrname,'message':message,'location': location,"filetype":filetype,'filename':filename}))
+        await self.send(text_data=json.dumps({'rq':self.scope['user'].username, 'pic': pic,'usrname': usrname,'message':message,'location': location,"filetype":filetype,'filename':filename}))
 
     @database_sync_to_async
     def participants_cache_add(self, room_id):
