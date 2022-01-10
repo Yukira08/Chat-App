@@ -386,7 +386,7 @@
         // div.innerHTML += "<p>" + message  + "<p>";
         
         console.log(data);
-        if(message!=''){
+        if(message!=''&&data['location']==''){
         msging(data,0);}
         if (data['location']!=''){
             console.log("there is location");
@@ -486,7 +486,7 @@
             var file = document.getElementById('filename').files[0];
             sendFile(file,message,room_id);
         }
-        if(message!=''){
+        if(message!=''&&fi==''){
             chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id}));
         }
         messageInputDom.value = '';
@@ -505,8 +505,10 @@
         }
         var msg = document.createElement("div");
             msg.className=predef[m][1];
+        var showmsg=document.createElement("div");
+            msg.appendChild(showmsg);
             if (kind == 0){ // message
-            msg.innerText=data["message"];}
+            showmsg.innerText=data["message"];}
             else if (kind == 1){ //image
             var showimg=document.createElement("img");
             showimg.src=data['location'];
