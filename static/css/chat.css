@@ -26,7 +26,16 @@ html {
   margin: 15px;
   text-align: center;
 }
-
+.up , .down , .done{
+  background-color: rgba(0,0,0,0.3);
+  margin: 3px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  padding: 8px;
+}
 .margin{
   padding-left: 0;
 }

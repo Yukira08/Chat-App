@@ -8,7 +8,7 @@ from datetime import datetime
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect(index)
     return render(request, 'accounts/login.html')
 
 
