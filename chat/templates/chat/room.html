@@ -161,9 +161,9 @@
 									<span><i class="fas fa-phone"></i></span>
 								</div> -->
                                 <div class="input-group float-right">
-                                    <input type="text" placeholder="Search Conversation" name="" style="height: 50px !important;" class="search search_msg" id="search-input">
+                                    <input type="text" placeholder="Search Conversation" name="" style="height: 50px !important;" class="search search_msg" id="search-input" >
                                     <div class="input-group-prepend">
-                                        <button class="input-group-text search_btn" style="height: 50px !important;" onclick= "window.submitFunction()"><i class="fas fa-search"></i></button>
+                                        <button class="input-group-text search_btn" style="height: 50px !important;" onclick= "submitFunction()"><i class="fas fa-search"></i></button>
                                     </div>
                                 </div>
 							</div>
@@ -178,13 +178,14 @@
 							</div> -->
               
 						</div>
-						<div class="card-body msg_card_body">
+						<div class="card-body msg_card_body" >
                             <!------- messages ------->
                             {% for message in messages %}
                             {% if message.sender == user %}
                             <div class="d-flex mb-4 replied">
 								<div class="msg_cotainer_send">
-									{{ message.message}}
+                                    <span>
+									{{ message.message}}</span>
 									<span class="msg_time_send">8:55 AM, Today</span>
 								</div>
 								<div class="img_cont_msg">
@@ -198,7 +199,9 @@
 								</div>
 
 								<div class="msg_cotainer">
+                                <span>
 									{{ message.message}}
+                                </span>
 									<span class="msg_time">8:40 AM, Today</span>
 								</div>
 							</div>
@@ -298,6 +301,8 @@
         var inputtext=document.getElementById("id_short_text");
         inputtext.className="form-control type_msg";
         inputtext.placeholder="Type your message...";
+        var element = document.getElementsByClassName("d-flex mb-4");
+        element[element.length-1].scrollIntoView(false);
     }
     var room_id = {{ room_id }};
     //const user_id = JSON.parse(document.getElementById('user_id').textContent);
@@ -354,20 +359,71 @@
             document.querySelector('#chat-message-submit').click();
         }
     };
-
+    var rz=[];
+    var cursearch;
     function submitFunction() {
         var searchInput = document.querySelector("#search-input");
-        var ancestor = document.getElementById('chat-log');
-        var descendents = ancestor.getElementsByTagName('p');
-        for (var i = 0; i < descendents.length; i++){
-            descendents[i].innerHTML = descendents[i].innerHTML.replace(
+        var s=searchInput.value;
+        if (s.replaceAll(/\s/g,'')  != "" && document.getElementById("DONE")== null){
+        var text_container = document.querySelectorAll('.msg_cotainer_send,.msg_cotainer');
+        console.log(text_container.length);
+        for (var i = text_container.length-1;i>-1; i--){
+            text_container[i].children[0].innerHTML = text_container[i].children[0].innerHTML.replace(
                 new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
-                '<b style="background-color:#ff0;font-size:100%">$&</b>'
+                '<b class="match" style="background-color:#ffe5b4;font-size:100%">$&</b>'
             );
         }
-        searchInput.value = '';
-    }
+    
+    rz=document.getElementsByClassName("match");
+    cursearch=rz.length-1;
+    jump(0);
+    duringsearch("^","jump(-1)");
+    duringsearch("v","jump(1)");
+        }
+        
+            if(document.getElementById("DONE")== null){
+    duringsearch("DONE","reset()");}
+        
 
+    
+    }
+    function duringsearch(sign,functionn){
+        var done=document.createElement("button");
+        done.className="btn btn-outline-secondary input-group-text";
+        done.style="height: 50px !important;";
+        done.setAttribute("onclick",functionn);
+        done.innerHTML=sign;
+        done.id=sign;
+        var chathead = document.createElement("div");
+        chathead.className="input-group-prepend";
+        chathead.appendChild(done);
+        var done=document.getElementsByClassName("input-group float-right")[0];
+        done.appendChild(chathead);
+    }
+    function reset(){
+        if (rz.length>0){
+            location.reload();}
+        else{
+        var searchInput = document.querySelector("#search-input");
+        searchInput.value="";
+        document.getElementById("^").remove();
+        document.getElementById("v").remove();
+        document.getElementById("DONE").remove();
+        }
+
+    }
+    function jump(direction){
+        cursearch+=direction;
+        if (cursearch>-1 && cursearch<rz.length){
+            if (cursearch-direction>-1 && cursearch<rz.length+direction){
+        rz[cursearch-direction].style="background-color:#ffe5b4;"}
+        rz[cursearch].scrollIntoView({behavior: "smooth", block: 'nearest', inline: 'nearest' });
+        rz[cursearch].style="background-color:#fbb117;"
+        }
+        else{
+            cursearch-=direction;
+        }
+    }
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#id_short_text');
         var message = messageInputDom.value;
@@ -407,7 +463,9 @@
         }
         var msg = document.createElement("div");
             msg.className=predef[m][1];
-            msg.innerText=data["message"];
+        var msgcontent = document.createElement("span");
+            msgcontent.innerText=data["message"];
+        msg.appendChild(msgcontent);
         var msgtime = document.createElement("div");
             msgtime.className=predef[m][2];
             msgtime.innerText="8:40 AM, Today";
