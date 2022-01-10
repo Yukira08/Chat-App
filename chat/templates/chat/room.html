@@ -427,17 +427,8 @@
         document.getElementById("v").remove();
         document.getElementById("DONE").remove();
         }
-
-    function userSearch(){
-        var searchInput = document.getElementsByClassName("form-control search");
-        //console.log(searchInput[0].value);
-        search_url = "{% url 'friend_search' 1234 %}".replace(/1234/, searchInput[0].value );
-        searchInput[0].value = '';
-        document.location.href = search_url;
-
     }
 
-    }
     function jump(direction){
         cursearch+=direction;
         if (cursearch>-1 && cursearch<rz.length){
@@ -546,7 +537,14 @@
       }
     });
   }, 5000);
+    function userSearch(){
+        var searchInput = document.getElementsByClassName("form-control search");
+        //console.log(searchInput[0].value);
+        search_url = "{% url 'friend_search' 1234 %}".replace(/1234/, searchInput[0].value );
+        searchInput[0].value = '';
+        document.location.href = search_url;
 
+    }
 
 </script>
 </html>
