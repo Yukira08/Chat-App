@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core import serializers
 import json
-
+from django.db.models import Count
 # Create your views here.
 @login_required
 def index(request):
@@ -55,6 +55,12 @@ def room(request, room_id):
         'unread_num' : unread_num,
     })
 
+def checkajax(request):
+    room_id = request.GET.get('room_id')  
+    r=Room.objects.get(id=room_id)
+    mess=Message.objects.filter(room=r)[0]
+    return JsonResponse(data={"msg":mess.message}, status=200)
+
 
 
 @login_required
@@ -67,8 +73,6 @@ def add_room(request):
     return render(request, 'chat/add_room.html', {
         'friends' : friends
     })
-
-
 
 
 @login_required
