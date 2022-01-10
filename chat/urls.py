@@ -16,5 +16,4 @@ urlpatterns = [
     path('read_noti/<int:noti_id>/', views.read_noti, name = 'read_noti'),
     path('friend',views.friend,name='friend'),
     path('friend_search/<str:friendname>',views.friend_search,name='friend_search'),
-    path('direct_message/<str:friendname>', views.direct_message, name='direct_message'),
 ]

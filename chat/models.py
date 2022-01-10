@@ -17,7 +17,6 @@ class Room(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     participants=models.ManyToManyField(to=settings.AUTH_USER_MODEL)
-    dm = models.BooleanField(default = False)
 
 class Message(models.Model): #Change to Message
     idmessage=models.AutoField(primary_key=True)
