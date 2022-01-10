@@ -65,6 +65,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         room = Room.objects.get(id=room_id)
         a=Message.objects.create(sender=self.scope['user'],room = room, date=time,message=message,filename=name)
         if name!=None:
+            print("media root",str(settings.MEDIA_ROOT))
+            print("media url",str(settings.MEDIA_URL))
             location='upload/'+ str(a.room.id) 
             if not os.path.exists(str(settings.MEDIA_ROOT)+location):
                 os.makedirs(str(settings.MEDIA_ROOT)+location)
