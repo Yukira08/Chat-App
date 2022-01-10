@@ -188,13 +188,18 @@
                             <!------- messages ------->
                             {% for message in messages %}
                             {% if message.sender == user %}
-                            
                             <div class="d-flex mb-4 replied">
                                 
 								<div class="msg_cotainer_send">
-                                    <span>
-									{{ message.message}}</span>
-									<span class="msg_time_send">8:55 AM, Today</span>
+                                    {% if message.message != "" %}
+									<div>{{ message.message}}</div>
+                                    {% endif %}
+                                    {% if message.filename|slice:"-3::" in "jpgpnggif"  %}
+                                    <img class="card-img-top"src={{message.path}}>
+                                    {% elif message.message == "" %}
+                                    <a href={{message.path}}>{{message.filename}}</a>
+                                    {% endif %}
+									<span class="msg_time_send">{{message.date | date:"g A, d" }}</span>
 								</div>
                                 
 								<div class="img_cont_msg">
@@ -202,21 +207,26 @@
 								</div>
 							</div>
                             {% else %}
-                            
                             <div class="d-flex mb-4 received">
 								<div class="img_cont_msg">
 									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
 								</div>
-                                
+
 								<div class="msg_cotainer">
-                                <span>
-									{{ message.message}}
-                                </span>
-									<span class="msg_time">8:40 AM, Today</span>
+                                    {% if message.message != "" %}
+									<div>{{ message.message}}</div>
+                                    {% endif %}
+                                    {% if message.filename|slice:"-3::" in "jpgpnggif"  %}
+                                    <img class="card-img-top"src={{message.path}}>
+                                    {% elif message.message == "" %}
+                                    <a href={{message.path}}>{{message.filename}}</a>
+                                    {% endif %}
+									<span class="msg_time">{{message.date | date:"g A, d" }}</span>
 								</div>
 							</div>
                             {% endif %}
                             {% endfor %}
+
 
 
                             <!------- messages ------->
@@ -324,7 +334,8 @@
         var attach=document.createElement("input");
         attach.type="file";
         attach.id="filename";
-        attach.addEventListener("input",function(){fi=attach.files[0]["name"];});
+        attach.addEventListener("input",function(){fi=attach.files[0]["name"];
+        document.getElementsByClassName("fas fa-paperclip")[0].style="color: #ff5252;";});
         var sending=document.getElementsByClassName("input-group-text attach_btn")[0];
         sending.appendChild(attach); 
         var inputdiv = document.getElementsByClassName("dep-container")[0];
@@ -464,6 +475,7 @@
         var messageInputDom = document.querySelector('#id_short_text');
         var message = messageInputDom.value;
         if (fi!= ''){
+            document.getElementsByClassName("fas fa-paperclip")[0].style="color: #ffffff;";
             console.log("File included: ",fi);
             var file = document.getElementById('filename').files[0];
             sendFile(file,message,room_id);
@@ -487,9 +499,21 @@
         }
         var msg = document.createElement("div");
             msg.className=predef[m][1];
-        var msgcontent = document.createElement("span");
-            msgcontent.innerText=data["message"];
-        msg.appendChild(msgcontent);
+            if (kind == 0){ // message
+            msg.innerText=data["message"];}
+            else if (kind == 1){ //image
+            var showimg=document.createElement("img");
+            showimg.src=data['location'];
+            showimg.className="card-img-top";
+            msg.appendChild(showimg);
+            }
+            else {
+            var showf=document.createElement("a");
+            showf.href=data['location'];
+            showf.innerText=data['filename'];
+            showf.download=data['filename'];
+            msg.appendChild(showf);
+            }
         var msgtime = document.createElement("div");
             msgtime.className=predef[m][2];
             msgtime.innerText="8:40 AM, Today";
@@ -507,6 +531,7 @@
         }
             document.getElementsByClassName('card-body msg_card_body')[0].appendChild(showlink);
     }
+
 
     function getCookie(name) {
     var cookieValue = null;
