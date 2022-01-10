@@ -328,7 +328,7 @@
         reader.readAsArrayBuffer(file);
     }
     var chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
+        'wss://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
         // var prevmes = {{messages}};
@@ -511,7 +511,7 @@
             var cur_time = new Date(Date.now() - 5000);
             document.getElementById("notibtn").innerHTML =  data["notification"].length;
 
-            console.log(document.getElementsByClassName("dropbtn").innerHTML);
+            //console.log(document.getElementsByClassName("dropbtn").innerHTML);
             var ancestor =document.getElementsByClassName("dropdown-content");
             for(var i = 0; i < data["notification"].length; i++){
                 var noti_time = Date.parse(data["notification"][i].time); 

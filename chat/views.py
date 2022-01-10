@@ -116,13 +116,13 @@ def message_search(request, room_id):
 @login_required
 def load_noti(request):
     signal = request.GET.get('signal')  
-    print(signal)
+    #print(signal)
 
     notification = Notification.objects.filter(receiver = request.user, unread = True).order_by('-time')
     senders = []
     for n in notification:
         senders.append(n.sender.username)
-    print(notification.count())
+    #print(notification.count())
     return JsonResponse(data={"notification":list(notification.values()), "senders":senders}, status=200)
 
 @login_required
@@ -137,6 +137,6 @@ def read_noti(request, noti_id):
 
 def friend(request):
     friends = Friendship.objects.filter(friends=request.user).all()
-    for friend in friends:
-        print(friend.cur_user.username)
+    # for friend in friends:
+    #     print(friend.cur_user.username)
     return render(request,'chat/friend.html' ,{"friends":friends})
