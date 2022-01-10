@@ -24,26 +24,14 @@
 		<link rel="stylesheet" href="{% static 'js/room.js'%}">
     </head>
 	<body>
-                        
-        <!-- <ul class="notifications">
-            {% if notifications %}
-            {% for notification in  notifications %}
-            {% if notification.unread and notification.noti_type == 1 %}
-            <p><a href="{% url 'room' room_id=notification.destination %}"><b>New message from {{ notification.sender }}</b></a></p>
-            {% else %}
-            <p><a href="{% url 'room' room_id=notification.destination %}">New message from {{ notification.sender }}</a></p>
-            {% endif %}
-            {% endfor %}
-            {% endif %}
-        </ul> -->
 
 		<div class="container-fluid h-100">
-            <div class="dropdown">
-                <button class="dropbtn" id = "notibtn">Notification {{ unread_num }}</button>
+            <!-- <div class="dropdown">
+                <button class="dropbtn" id = "">Notification {{ unread_num }}</button>
                 <div class="dropdown-content">
-                  <!-- <a href="#">Link 1</a>
+                  <a href="#">Link 1</a>
                   <a href="#">Link 2</a>
-                  <a href="#">Link 3</a> -->
+                  <a href="#">Link 3</a>
                   {% if notifications %}
                   {% for notification in  notifications %}
                     {% if notification.noti_type == 1 %}
@@ -71,7 +59,7 @@
                   {% endfor %}
                   {% endif %}
                 </div>
-              </div>
+              </div> -->
 			<div class="row justify-content-center h-100">
 				<div class="col-md-0 h-100 chat mt-4">
 					<div class="nav ">
@@ -80,14 +68,45 @@
 							<a class="nav-link" href="#"><i class="fas fa-user fa-2x"></i></a>
 							</li>
 							<li class="nav-item">
-							<a class="nav-link" href="#"><i class="fas fa-comment-dots fa-2x"></i></a>
+							<a class="nav-link" href="{% url 'add_room'%}"><i class="fas fa-users fa-2x"></i></a>
 							</li>
 							<li class="nav-item">
-							<a class="nav-link" href="#"><i class="fas fa-address-book fa-2x"></i></a>
+							<a class="nav-link" href="{% url 'friend'%}"><i class="fas fa-address-book fa-2x"></i></a>
 							</li>
 							<li class="nav-item">
 							<a class="nav-link" href="#"> <i class="fas fa-user-plus fa-2x"></i></a>
 							</li> 
+                            <li class="nav-item dropdown">
+                            <a class="nav-link dropbtn notification" ><i class="fas fa-bell fa-2x "></i><span id="notibtn" class="badge">{{ unread_num }}</span></a>
+                            <div class="dropdown-content">
+                                {% if notifications %}
+                                {% for notification in  notifications %}
+                                  {% if notification.noti_type == 1 %}
+                                  {% if notification.unread %}
+                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
+                                  {% else %}
+                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>  
+                                  {% endif %}
+              
+                                  {% elif notification.noti_type == 2 %}
+                                  {% if notification.unread %}
+                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New friend request from {{ notification.sender }}</b></a></p>
+                                  {% else %}
+                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}">New friend request from {{ notification.sender }}</a></p>  
+                                  {% endif %}
+              
+                                  {% elif notification.noti_type == 3 %}
+                                  {% if notification.unread %}
+                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>request accepted by {{ notification.sender }}</b></a></p>
+                                  {% else %}
+                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"> request accepted by {{ notification.sender }}</a></p>  
+                                  {% endif %}
+                                  
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            </li>
 						</ul>
 					</div>
 				</div>
@@ -152,10 +171,18 @@
                             <div class="d-flex mb-4 replied">
                                 
 								<div class="msg_cotainer_send">
-                                    <span class="msg_time">{{ message.date }}</span>
-									<span class="msg_content">{{ message.message}}</span>
-									
+                                    {% if message.message != "" %}
+									{{ message.message}}
+                                    {% else %}
+                                    {% if message.filename|slice:"-3::" in "jpgpnggif"  %}
+                                    <img class="card-img-top"src={{message.path}}>
+                                    {% else %}
+                                    <a href={{message.path}}>{{message.filename}}</a>
+                                    {% endif %}
+                                    {% endif %}
+									<span class="msg_time_send">{{message.date | date:"g A, d" }}</span>
 								</div>
+                                
 								<div class="img_cont_msg">
 							<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"class="rounded-circle user_img_msg">
 								</div>
@@ -168,9 +195,12 @@
 								</div>
                                 
 								<div class="msg_cotainer">
-                                    <span class="msg_time">{{ message.date }}</span>
-									<span class="msg_content">{{ message.message}}</span>
-									
+                                    {% if message.message != "" %}
+									{{ message.message}}
+                                    {% else %}
+                                    <img src={{message.path}}>
+                                    {% endif %}
+									<span class="msg_time">8:40 AM, Today</span>
 								</div>
 							</div>
                             {% endif %}
@@ -188,6 +218,7 @@
                                     {% csrf_token %}
                                     {{form.media}}
                                     {{form.short_text}}
+                                    
                                     <div class="input-group-append">
                                         <button class="btn btn-secondary" id="chat-message-submit" type="submit" value = "Send">
                                             <span class="input-group-text send_btn">
@@ -225,6 +256,7 @@
 
     <input id="search-input" type="text" placeholder="Search"/> -->
     <button onclick= "window.submitFunction()">Submit</button>
+
     <!-- {% csrf_token %}
 
     
@@ -250,57 +282,14 @@
     </div> -->
     <!-- <p>{{ user.id|json_script:"user_id" }}</p> -->
 </body>
-<style>
-    /* Dropdown Button */
-.dropbtn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
 
-}
-
-/* The container <div> - needed to position the dropdown content */
-.dropdown {
-  position: relative;
-  display: inline-block;
-
-}
-
-/* Dropdown Content (Hidden by Default) */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd;}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content { display : block; max-height: 500px;
-  overflow:scroll; }
-
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
-
-</style>
 
 <script>
     var fi='';
     function init(){
+        // console.log(JSON.parse(document.getElementById('hello-data').textContent));
+        // var myVar = document.getElementById("myVar").value;
+        // console.log(myVar);
         var attach=document.createElement("input");
         attach.type="file";
         attach.id="filename";
@@ -312,6 +301,8 @@
         var inputtext=document.getElementById("id_short_text");
         inputtext.className="form-control type_msg";
         inputtext.placeholder="Type your message...";
+        var element = document.getElementsByClassName("msg_card_body")[0];
+        element.scrollTop = element.scrollHeight;
     }
     var room_id = {{ room_id }};
     //const user_id = JSON.parse(document.getElementById('user_id').textContent);
@@ -348,15 +339,20 @@
         
         console.log(data);
         if(message!=''){
-        msging(data);}
+        msging(data,0);}
         if (data['location']!=''){
+            console.log("there is location");
             if (data['filetype'].includes('image',0)){
-                imagefile(data);
+                msging(data,1);
             }
             else{
-                nomiefile(data);
+                msging(data,2);
             }
 
+        }
+        else{
+            
+            console.log("there isn't any location");
         }
     };
     chatSocket.onclose = function(e) {
@@ -407,19 +403,7 @@
         }
         messageInputDom.value = '';
     };
-    function nomiefile(data){
-        var showlink=document.createElement("a");
-            showlink.href=data['location'];
-            showlink.innerText=data['filename'];
-            showlink.download=data['filename'];
-            document.getElementById("test-file").appendChild(showlink);
-    }
-    function imagefile(data){
-        var showlink=document.createElement("img");
-            showlink.src=data['location'];
-            document.getElementById("test-file").appendChild(showlink);
-    }
-    function msging(data){
+    function msging(data,kind){
         const predef=[["d-flex mb-4 replied", "msg_cotainer_send","msg_time_send"],["d-flex mb-4 received", "msg_cotainer","msg_time"],["img_cont_msg","rounded-circle user_img_msg"]];
         var icon=document.createElement("div");
             icon.className=predef[2][0];
@@ -428,12 +412,26 @@
             immg.src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg";
         icon.appendChild(immg);
         var m=0;
-        if (data["usrname"]!="admin"){
+        if (data["usrname"]!=data["rq"]){
             m=1;
         }
         var msg = document.createElement("div");
             msg.className=predef[m][1];
-            msg.innerText=data["message"];
+            if (kind == 0){ // message
+            msg.innerText=data["message"];}
+            else if (kind == 1){ //image
+            var showimg=document.createElement("img");
+            showimg.src=data['location'];
+            showing.className="card-img-top";
+            msg.appendChild(showimg);
+            }
+            else {
+            var showf=document.createElement("a");
+            showf.href=data['location'];
+            showf.innerText=data['filename'];
+            showf.download=data['filename'];
+            msg.appendChild(showf);
+            }
         var msgtime = document.createElement("div");
             msgtime.className=predef[m][2];
             msgtime.innerText="8:40 AM, Today";
@@ -479,9 +477,9 @@
     success: function (data) {
         if (data) {
             var cur_time = new Date(Date.now() - 5000);
-            document.getElementById("notibtn").innerHTML = 'Notification' + ' ' + data["notification"].length;
+            document.getElementById("notibtn").innerHTML =  data["notification"].length;
 
-            console.log(document.getElementsByClassName("dropbtn").innerHTML);
+            //console.log(document.getElementsByClassName("dropbtn").innerHTML);
             var ancestor =document.getElementsByClassName("dropdown-content");
             for(var i = 0; i < data["notification"].length; i++){
                 var noti_time = Date.parse(data["notification"][i].time); 
