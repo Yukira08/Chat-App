@@ -65,13 +65,38 @@ def checkajax(request):
 
 @login_required
 def add_room(request):
+    room_id = 0
+    participant_list = []
     inst = Friendship.objects.filter(friends=request.user)
     friends = []
+    room_name = None
     for i in inst:
         friends.append(i.cur_user.username)
+        #print(i.cur_user.username)
+    title = "Create room"
+
+    if request.method=="POST":
+        room_id = request.POST['room_id']
+        
+        room = Room.objects.get(id=room_id)
+        room_name = room.name
+        title = "Modify room " + room.name
+        #print(title)
+        for participant in room.participants.all():
+            #print(participant.username)
+            if participant.username in friends and participant.username != request.user.username:
+                participant_list.append(participant.username)
+
+        # return render(request, 'chat/add_room.html', {
+        # 'friends' : friends
+        # })
 
     return render(request, 'chat/add_room.html', {
-        'friends' : friends
+        'friends' : friends,
+        'title' : title,
+        'participants' : mark_safe(json.dumps(participant_list)),
+        'room_id' : room_id,
+        'room_name' :  mark_safe(json.dumps(room_name)),
     })
 
 
@@ -81,6 +106,22 @@ def create_room(request):
     if request.method=="POST":
         room_name = request.POST['room_name']
         friends = request.POST.getlist('friends')
+        # print(request.POST['room_id'])
+        #print("running")
+
+        if request.POST['room_id'] != '0':
+            cur_room = Room.objects.get(id=request.POST['room_id'])
+            cur_room.name = room_name
+            cur_room.participants.set([]) 
+            cur_room.participants.add(request.user)
+            for friend in friends:
+                a = User.objects.get(username=friend)
+                cur_room.participants.add(a)
+                
+            cur_room.save()
+            return redirect(room, room_id=cur_room.id)
+
+        #print(friends)
         # mutualroom=Room.objects.filter(participants__username__in=friends.append(request.user.username))\
         # .annotate(num_ptcpant=Count('participants')).filter(num_ptcpant=len(friends.append(request.user.username)))
         mutualrooms=Room.objects.filter(participants__username__in=friends+[request.user.username])
@@ -144,8 +185,14 @@ def read_noti(request, noti_id):
     else:
         return redirect(profile, notification.sender.username)
 
+@login_required
 def friend(request):
     friends = Friendship.objects.filter(friends=request.user).all()
-    # for friend in friends:
-    #     print(friend.cur_user.username)
+    for friend in friends:
+        print(friend.cur_user.username)
     return render(request,'chat/friend.html' ,{"friends":friends})
+
+@login_required
+def friend_search(request, friendname):
+    friends = User.objects.filter(username__icontains=friendname)
+    return render(request,'chat/friend_search.html', {"friends":friends})

@@ -33,6 +33,7 @@ def friendlist(username):
 
 
 def profile(request,username):
+    
     friendnames = friendlist(request.user.username)
     if request.method=='POST':
         print("Change pic")
@@ -49,6 +50,7 @@ def profile(request,username):
     friend_number = 0
     inst=User.objects.get(username=username)
     print(inst.img.url)
+    data['room_id'] = 0
     data['user']=inst
     data['img_form']=img_form
     Friendship.objects.filter(friends=inst)

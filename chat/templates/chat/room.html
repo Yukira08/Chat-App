@@ -70,7 +70,7 @@
 					<div class="nav ">
 						<ul class="navbar-nav">
 							<li class="nav-item">
-							<a class="nav-link" href="#"><i class="fas fa-user fa-2x"></i></a>
+							<a class="nav-link" href="{% url 'profile' username=user.username %}"><i class="fas fa-user fa-2x"></i></a>
 							</li>
 							<li class="nav-item">
 							<a class="nav-link" href="{% url 'add_room'%}"><i class="fas fa-users fa-2x"></i></a>
@@ -79,7 +79,12 @@
 							<a class="nav-link" href="{% url 'friend'%}"><i class="fas fa-address-book fa-2x"></i></a>
 							</li>
 							<li class="nav-item">
-							    <a class="nav-link" href="#"> <i class="fas fa-user-plus fa-2x"></i></a>
+							   
+                                <form action="{% url 'add_room' %}" method = "post">
+                                    {% csrf_token %}
+                                    <input class ="d-none" name="room_id" value="{{this_room}}">
+                                    <button type = "submit" class="nav-link"><i class="fas fa-user-plus fa-2x"></i></button>
+                                  </form>
 							</li> 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropbtn notification" ><i class="fas fa-bell fa-2x "></i><span id="notibtn" class="badge">{{ unread_num }}</span></a>
@@ -123,9 +128,9 @@
                     <div class="card  mb-sm-3 mb-md-0 contacts_card">
 					<div class="card-header">
 						<div class="input-group">
-							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<input type="text" placeholder="Search for users" name="" class="form-control search">
 							<div class="input-group-prepend">
-								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+								<span class="input-group-text search_btn" onclick= "window.userSearch()"><i class="fas fa-search"></i></span>
 							</div>
 						</div>
 					</div>
@@ -183,6 +188,7 @@
                             <!------- messages ------->
                             {% for message in messages %}
                             {% if message.sender == user %}
+                            
                             <div class="d-flex mb-4 replied">
                                 
 								<div class="msg_cotainer_send">
@@ -196,11 +202,12 @@
 								</div>
 							</div>
                             {% else %}
+                            
                             <div class="d-flex mb-4 received">
 								<div class="img_cont_msg">
 									<img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
 								</div>
-
+                                
 								<div class="msg_cotainer">
                                 <span>
 									{{ message.message}}
@@ -347,7 +354,7 @@
         reader.readAsArrayBuffer(file);
     }
     var chatSocket = new WebSocket(
-        'wss://' + window.location.host + '/ws/chat/' + room_id + '/');
+        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
         // var prevmes = {{messages}};
@@ -440,6 +447,15 @@
         document.getElementById("DONE").remove();
         }
 
+    function userSearch(){
+        var searchInput = document.getElementsByClassName("form-control search");
+        //console.log(searchInput[0].value);
+        search_url = "{% url 'friend_search' 1234 %}".replace(/1234/, searchInput[0].value );
+        searchInput[0].value = '';
+        document.location.href = search_url;
+
+    }
+
     }
     function jump(direction){
         cursearch+=direction;
@@ -518,7 +534,6 @@
       }
     var csrftoken = getCookie('csrftoken');
     setInterval(function(){ 
-      //console.log("load notification is running");
     $.ajax({
     url: "{% url 'load_noti'%}",
     headers: {'X-CSRFToken': csrftoken},
