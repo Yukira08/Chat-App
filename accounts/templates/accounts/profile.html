@@ -73,6 +73,12 @@
 
           {%else%}
           {% if not per %}
+          <form action="{% url 'create_room' %}" method = "post">
+            {% csrf_token %}
+            <input class ="d-none" id="room-name-input" name="room_name" value="{{user.username}}{{per}}">
+            <input class ="d-none" id="{{user.username}}" value = "{{user.username}}">
+            <button type="submit" class="btn btn-secondary">Create</button>
+          </form>
           <a href="{% url 'unfriend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} UnFriend</a>
           <a class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} &nbsp;Friends</a>
           {% endif %}
