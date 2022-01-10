@@ -190,7 +190,7 @@ def friend(request):
         print(friend.cur_user.username)
     return render(request,'chat/friend.html' ,{"friends":friends})
 
-@login_required
+
 def friend_search(request, friendname):
     friends = User.objects.filter(username__icontains=friendname)
     return render(request,'chat/friend_search.html', {"friends":friends})
