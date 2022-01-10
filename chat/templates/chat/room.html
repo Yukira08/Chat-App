@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="{% static 'css/chat.css'%}">
-    <link rel="stylesheet" href="{% static 'js/room.js'%}">
+    <!-- <link rel="stylesheet" href="{% static 'js/room.js'%}"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body onload="init()">
@@ -21,7 +21,12 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 		<link rel="stylesheet" href="{% static 'css/chat.css'%}">
-		<link rel="stylesheet" href="{% static 'js/room.js'%}">
+		<!-- <link rel="stylesheet" href="{% static 'js/room.js'%}"> -->
+        <style>
+            .bottom{
+                text-align: bottom;
+            }
+        </style>
     </head>
 	<body>
 
@@ -74,38 +79,46 @@
 							<a class="nav-link" href="{% url 'friend'%}"><i class="fas fa-address-book fa-2x"></i></a>
 							</li>
 							<li class="nav-item">
-							<a class="nav-link" href="#"> <i class="fas fa-user-plus fa-2x"></i></a>
+							   
+                                <form action="{% url 'add_room' %}" method = "post">
+                                    {% csrf_token %}
+                                    <input class ="d-none" name="room_id" value="{{this_room}}">
+                                    <button type = "submit" class="nav-link"><i class="fas fa-user-plus fa-2x"></i></button>
+                                  </form>
 							</li> 
                             <li class="nav-item dropdown">
-                            <a class="nav-link dropbtn notification" ><i class="fas fa-bell fa-2x "></i><span id="notibtn" class="badge">{{ unread_num }}</span></a>
-                            <div class="dropdown-content">
-                                {% if notifications %}
-                                {% for notification in  notifications %}
-                                  {% if notification.noti_type == 1 %}
-                                  {% if notification.unread %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
-                                  {% else %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>  
-                                  {% endif %}
-              
-                                  {% elif notification.noti_type == 2 %}
-                                  {% if notification.unread %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New friend request from {{ notification.sender }}</b></a></p>
-                                  {% else %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}">New friend request from {{ notification.sender }}</a></p>  
-                                  {% endif %}
-              
-                                  {% elif notification.noti_type == 3 %}
-                                  {% if notification.unread %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>request accepted by {{ notification.sender }}</b></a></p>
-                                  {% else %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"> request accepted by {{ notification.sender }}</a></p>  
-                                  {% endif %}
-                                  
-                                {% endif %}
-                                {% endfor %}
-                                {% endif %}
-                            </div>
+                                <a class="nav-link dropbtn notification" ><i class="fas fa-bell fa-2x "></i><span id="notibtn" class="badge">{{ unread_num }}</span></a>
+                                <div class="dropdown-content">
+                                    {% if notifications %}
+                                    {% for notification in  notifications %}
+                                    {% if notification.noti_type == 1 %}
+                                    {% if notification.unread %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
+                                    {% else %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>  
+                                    {% endif %}
+                
+                                    {% elif notification.noti_type == 2 %}
+                                    {% if notification.unread %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New friend request from {{ notification.sender }}</b></a></p>
+                                    {% else %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}">New friend request from {{ notification.sender }}</a></p>  
+                                    {% endif %}
+                
+                                    {% elif notification.noti_type == 3 %}
+                                    {% if notification.unread %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>request accepted by {{ notification.sender }}</b></a></p>
+                                    {% else %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"> request accepted by {{ notification.sender }}</a></p>  
+                                    {% endif %}
+                                    
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'logout'%}" class="nav-link bottom"><i class="fas fa-sign-out-alt fa-2x"></i></a>
                             </li>
 						</ul>
 					</div>
@@ -145,15 +158,21 @@
                                 {% if chat_room.id != this_room %}
 								<div class="user_info">
 									<span>{{ chat_room.name }}</span>
-									<p>1767 Messages</p>
+									<!-- <p>1767 Messages</p> -->
 								</div>
                                 {% endif %}
-								<div class="video_cam">
+								<!-- <div class="video_cam">
 									<span><i class="fas fa-video"></i></span>
 									<span><i class="fas fa-phone"></i></span>
-								</div>
+								</div> -->
+                                <div class="input-group float-right">
+                                    <input type="text" placeholder="Search Conversation" name="" style="height: 50px !important;" class="search search_msg" id="search-input" >
+                                    <div class="input-group-prepend">
+                                        <button class="input-group-text search_btn" style="height: 50px !important;" onclick= "submitFunction()"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
 							</div>
-							<span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+							<!-- <span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
 							<div class="action_menu">
 								<ul>
 									<li><i class="fas fa-user-circle"></i> View profile</li>
@@ -161,9 +180,10 @@
 									<li><i class="fas fa-plus"></i> Add to group</li>
 									<li><i class="fas fa-ban"></i> Block</li>
 								</ul>
-							</div>
+							</div> -->
+              
 						</div>
-						<div class="card-body msg_card_body">
+						<div class="card-body msg_card_body" >
                             <!------- messages ------->
                             {% for message in messages %}
                             {% if message.sender == user %}
@@ -171,16 +191,9 @@
                             <div class="d-flex mb-4 replied">
                                 
 								<div class="msg_cotainer_send">
-                                    {% if message.message != "" %}
-									{{ message.message}}
-                                    {% else %}
-                                    {% if message.filename|slice:"-3::" in "jpgpnggif"  %}
-                                    <img class="card-img-top"src={{message.path}}>
-                                    {% else %}
-                                    <a href={{message.path}}>{{message.filename}}</a>
-                                    {% endif %}
-                                    {% endif %}
-									<span class="msg_time_send">{{message.date | date:"g A, d" }}</span>
+                                    <span>
+									{{ message.message}}</span>
+									<span class="msg_time_send">8:55 AM, Today</span>
 								</div>
                                 
 								<div class="img_cont_msg">
@@ -195,11 +208,9 @@
 								</div>
                                 
 								<div class="msg_cotainer">
-                                    {% if message.message != "" %}
+                                <span>
 									{{ message.message}}
-                                    {% else %}
-                                    <img src={{message.path}}>
-                                    {% endif %}
+                                </span>
 									<span class="msg_time">8:40 AM, Today</span>
 								</div>
 							</div>
@@ -218,7 +229,9 @@
                                     {% csrf_token %}
                                     {{form.media}}
                                     {{form.short_text}}
-                                    
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text emoji">&nbsp;&nbsp;</span>
+                                    </div>
                                     <div class="input-group-append">
                                         <button class="btn btn-secondary" id="chat-message-submit" type="submit" value = "Send">
                                             <span class="input-group-text send_btn">
@@ -256,7 +269,6 @@
 
     <input id="search-input" type="text" placeholder="Search"/> -->
     <!-- <button onclick= "window.submitFunction()">Submit</button> -->
-
     <!-- {% csrf_token %}
 
     
@@ -297,12 +309,12 @@
         var sending=document.getElementsByClassName("input-group-text attach_btn")[0];
         sending.appendChild(attach); 
         var inputdiv = document.getElementsByClassName("dep-container")[0];
-        inputdiv.className="input-group-append";
+        inputdiv.className="input-group-append form-control input_div";
         var inputtext=document.getElementById("id_short_text");
         inputtext.className="form-control type_msg";
         inputtext.placeholder="Type your message...";
-        var element = document.getElementsByClassName("msg_card_body")[0];
-        element.scrollTop = element.scrollHeight;
+        var element = document.getElementsByClassName("d-flex mb-4");
+        element[element.length-1].scrollIntoView(false);
     }
     var room_id = {{ room_id }};
     //const user_id = JSON.parse(document.getElementById('user_id').textContent);
@@ -364,31 +376,57 @@
             document.querySelector('#chat-message-submit').click();
         }
     };
-
+    var rz=[];
+    var cursearch;
     function submitFunction() {
-        // var searchInput = document.querySelector("#search-input");
-        // var ancestor = document.getElementById('chat-log');
-        // var descendents = ancestor.getElementsByTagName('p');
-        // for (var i = 0; i < descendents.length; i++){
-        //     descendents[i].innerHTML = descendents[i].innerHTML.replace(
-        //         new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
-        //         '<b style="background-color:#ff0;font-size:100%">$&</b>'
-        //     );
-        // }
-        // searchInput.value = '';
-
-        var div = document.getElementsByClassName("msg_content");
-        for (var i = 0; i < div.length; i++){
-            console.log(div[i].innerHTML);
-            div[i].innerHTML = div[i].innerHTML.replace(
-                new RegExp('hi' + '(?!([^<]+)?<)', 'gi'),
-                '<b style="background-color:#ff0;font-size:100%">$&</b>'
+        var searchInput = document.querySelector("#search-input");
+        var s=searchInput.value;
+        if (s.replaceAll(/\s/g,'')  != "" && document.getElementById("DONE")== null){
+        var text_container = document.querySelectorAll('.msg_cotainer_send,.msg_cotainer');
+        console.log(text_container.length);
+        for (var i = text_container.length-1;i>-1; i--){
+            text_container[i].children[0].innerHTML = text_container[i].children[0].innerHTML.replace(
+                new RegExp(searchInput.value + '(?!([^<]+)?<)', 'gi'),
+                '<b class="match" style="background-color:#ffe5b4;font-size:100%">$&</b>'
             );
         }
+    
+    rz=document.getElementsByClassName("match");
+    cursearch=rz.length-1;
+    jump(0);
+    duringsearch("^","jump(-1)");
+    duringsearch("v","jump(1)");
+        }
+        
+            if(document.getElementById("DONE")== null){
+    duringsearch("DONE","reset()");}
+        
 
-
-        console.log(div);
+    
     }
+    function duringsearch(sign,functionn){
+        var done=document.createElement("button");
+        done.className="btn btn-outline-secondary input-group-text";
+        done.style="height: 50px !important;";
+        done.setAttribute("onclick",functionn);
+        done.innerHTML=sign;
+        done.id=sign;
+        var chathead = document.createElement("div");
+        chathead.className="input-group-prepend";
+        chathead.appendChild(done);
+        var done=document.getElementsByClassName("input-group float-right")[0];
+        done.appendChild(chathead);
+    }
+    function reset(){
+        if (rz.length>0){
+            location.reload();}
+        else{
+        var searchInput = document.querySelector("#search-input");
+        searchInput.value="";
+        document.getElementById("^").remove();
+        document.getElementById("v").remove();
+        document.getElementById("DONE").remove();
+        }
 
     function userSearch(){
         var searchInput = document.getElementsByClassName("form-control search");
@@ -399,7 +437,19 @@
 
     }
 
-
+    }
+    function jump(direction){
+        cursearch+=direction;
+        if (cursearch>-1 && cursearch<rz.length){
+            if (cursearch-direction>-1 && cursearch<rz.length+direction){
+        rz[cursearch-direction].style="background-color:#ffe5b4;"}
+        rz[cursearch].scrollIntoView({behavior: "smooth", block: 'nearest', inline: 'nearest' });
+        rz[cursearch].style="background-color:#fbb117;"
+        }
+        else{
+            cursearch-=direction;
+        }
+    }
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#id_short_text');
         var message = messageInputDom.value;
@@ -427,21 +477,9 @@
         }
         var msg = document.createElement("div");
             msg.className=predef[m][1];
-            if (kind == 0){ // message
-            msg.innerText=data["message"];}
-            else if (kind == 1){ //image
-            var showimg=document.createElement("img");
-            showimg.src=data['location'];
-            showing.className="card-img-top";
-            msg.appendChild(showimg);
-            }
-            else {
-            var showf=document.createElement("a");
-            showf.href=data['location'];
-            showf.innerText=data['filename'];
-            showf.download=data['filename'];
-            msg.appendChild(showf);
-            }
+        var msgcontent = document.createElement("span");
+            msgcontent.innerText=data["message"];
+        msg.appendChild(msgcontent);
         var msgtime = document.createElement("div");
             msgtime.className=predef[m][2];
             msgtime.innerText="8:40 AM, Today";

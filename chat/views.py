@@ -59,13 +59,38 @@ def room(request, room_id):
 
 @login_required
 def add_room(request):
+    room_id = 0
+    participant_list = []
     inst = Friendship.objects.filter(friends=request.user)
     friends = []
+    room_name = None
     for i in inst:
         friends.append(i.cur_user.username)
+        #print(i.cur_user.username)
+    title = "Create room"
+
+    if request.method=="POST":
+        room_id = request.POST['room_id']
+        
+        room = Room.objects.get(id=room_id)
+        room_name = room.name
+        title = "Modify room " + room.name
+        #print(title)
+        for participant in room.participants.all():
+            #print(participant.username)
+            if participant.username in friends and participant.username != request.user.username:
+                participant_list.append(participant.username)
+
+        # return render(request, 'chat/add_room.html', {
+        # 'friends' : friends
+        # })
 
     return render(request, 'chat/add_room.html', {
-        'friends' : friends
+        'friends' : friends,
+        'title' : title,
+        'participants' : mark_safe(json.dumps(participant_list)),
+        'room_id' : room_id,
+        'room_name' :  mark_safe(json.dumps(room_name)),
     })
 
 
@@ -77,7 +102,23 @@ def create_room(request):
     if request.method=="POST":
         room_name = request.POST['room_name']
         friends = request.POST.getlist('friends')
-        
+        if request.POST['room_id'] != 0:
+            cur_room = Room.objects.get(id=request.POST['room_id'])
+            cur_room.name = room_name
+            for friend in friends:
+                a = User.objects.get(username=friend)
+                cur_room.participants.add(a)
+            cur_room.save()
+            return redirect(room, room_id=cur_room.id)
+
+
+        #print(friends)
+        # mutualroom=Room.objects.filter(participants__username__in=friends.append(request.user.username))\
+        # .annotate(num_ptcpant=Count('participants')).filter(num_ptcpant=len(friends.append(request.user.username)))
+        mutualrooms=Room.objects.filter(participants__username__in=friends+[request.user.username])
+        for mutualroom in mutualrooms:
+            if mutualroom.participants.count() == (len(friends)+1):
+                return redirect(room,room_id=mutualroom.id)
         new_room=Room.objects.create(name=room_name)
         new_room.participants.add(request.user)
 
@@ -116,13 +157,13 @@ def message_search(request, room_id):
 @login_required
 def load_noti(request):
     signal = request.GET.get('signal')  
-    print(signal)
+    #print(signal)
 
     notification = Notification.objects.filter(receiver = request.user, unread = True).order_by('-time')
     senders = []
     for n in notification:
         senders.append(n.sender.username)
-    print(notification.count())
+    #print(notification.count())
     return JsonResponse(data={"notification":list(notification.values()), "senders":senders}, status=200)
 
 @login_required
