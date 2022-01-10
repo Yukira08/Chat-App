@@ -128,10 +128,8 @@ def create_room(request):
             for friend in friends:
                 a = User.objects.get(username=friend)
                 cur_room.participants.add(a)
-                
             cur_room.save()
             return redirect(room, room_id=cur_room.id)
-        print("Friends: ",friends)
         #print(friends)
         mutualrooms=Room.objects.filter(participants__username__in=friends+[request.user.username])\
         .annotate(num_ptcpant=Count('participants')).filter(num_ptcpant=len(friends)+1)
