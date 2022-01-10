@@ -76,7 +76,12 @@ def create_room(request):
     if request.method=="POST":
         room_name = request.POST['room_name']
         friends = request.POST.getlist('friends')
-        
+        # mutualroom=Room.objects.filter(participants__username__in=friends.append(request.user.username))\
+        # .annotate(num_ptcpant=Count('participants')).filter(num_ptcpant=len(friends.append(request.user.username)))
+        mutualrooms=Room.objects.filter(participants__username__in=friends+[request.user.username])
+        for mutualroom in mutualrooms:
+            if mutualroom.participants.count() == (len(friends)+1):
+                return redirect(room,room_id=mutualroom.id)
         new_room=Room.objects.create(name=room_name)
         new_room.participants.add(request.user)
 
