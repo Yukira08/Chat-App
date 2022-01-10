@@ -417,7 +417,7 @@
     function submitFunction() {
         var searchInput = document.querySelector("#search-input");
         var s=searchInput.value;
-        if (s.replaceAll(/\s/g,'')  != "" && document.getElementById("DONE")== null){
+        if (s.replaceAll(/\s/g,'')  != "" && document.getElementById("done")== null){
         var text_container = document.querySelectorAll('.msg_cotainer_send,.msg_cotainer');
         console.log(text_container.length);
         for (var i = text_container.length-1;i>-1; i--){
@@ -430,23 +430,31 @@
     rz=document.getElementsByClassName("match");
     cursearch=rz.length-1;
     jump(0);
-    duringsearch("^","jump(-1)");
-    duringsearch("v","jump(1)");
+    duringsearch("up","jump(-1)");
+    duringsearch("down","jump(1)");
         }
         
-            if(document.getElementById("DONE")== null){
-    duringsearch("DONE","reset()");}
+            if(document.getElementById("done")== null){
+    duringsearch("done","reset()");}
         
 
     
     }
     function duringsearch(sign,functionn){
         var done=document.createElement("button");
-        done.className="btn btn-outline-secondary input-group-text";
+        done.className="btn btn-outline-secondary input-group-text"+ " " + sign;
         done.style="height: 50px !important;";
         done.setAttribute("onclick",functionn);
-        done.innerHTML=sign;
         done.id=sign;
+        var icon = document.createElement("i");
+        icon.className="fas";
+        if (sign!="done"){
+            icon.className=icon.className+" "+"fa-angle-"+sign;
+        }
+        else{
+            icon.className=icon.className+ " "+"fa-times";
+        }
+        done.appendChild(icon);
         var chathead = document.createElement("div");
         chathead.className="input-group-prepend";
         chathead.appendChild(done);
@@ -454,14 +462,18 @@
         done.appendChild(chathead);
     }
     function reset(){
+        console.log("reset");
         if (rz.length>0){
             location.reload();}
         else{
+        console.log("no length");
+
         var searchInput = document.querySelector("#search-input");
         searchInput.value="";
-        document.getElementById("^").remove();
-        document.getElementById("v").remove();
-        document.getElementById("DONE").remove();
+        if (document.getElementById("up")!=null){
+        document.getElementById("up").remove();
+        document.getElementById("down").remove();}
+        document.getElementById("done").remove();
         }
     }
 

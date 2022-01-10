@@ -5,12 +5,18 @@ from authtest.views import home
 from accounts.models import Notification, User, Friendship, FriendRequest
 from django.contrib import messages
 from datetime import datetime
+# from chat.views import index
+
 # Create your views here.
+# def login(request):
+#     if request.user.is_authenticated:
+#         return redirect('home')
+#     return render(request, 'accounts/login.html')
+
 def login(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('index')
     return render(request, 'accounts/login.html')
-
 
 def signup(request):
     if request.method == 'POST':
@@ -18,10 +24,11 @@ def signup(request):
         if form.is_valid():
             user=form.save()
             #log(request,user)
-            return redirect('home')
+            return redirect('login')
     else:
         form = CustomUserCreationForm()
     return render(request,'accounts/signup.html',{'form':form})
+
 def friendlist(username):
     friendnames = []
     friend_number = 0
