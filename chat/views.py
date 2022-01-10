@@ -145,3 +145,17 @@ def friend(request):
 def friend_search(request, friendname):
     friends = User.objects.filter(username__icontains=friendname)
     return render(request,'chat/friend_search.html', {"friends":friends})
+
+def direct_message(request, friendname):
+    friend = User.objects.get(username=friendname)
+    try:
+        room = Room.objects.filter(participants__in=[request.user, friend], dm = True)[0]
+        return redirect(room, room_id = room.id)
+    except:
+        room_name = request.user.username + ',' + friendname
+        room = Room.objects.create(name = room_name)
+        room.dm = True
+        room.participants.add(request.user)
+        room.participants.add(friend)
+        room.save()
+        return redirect(room, room_id = room.id)
