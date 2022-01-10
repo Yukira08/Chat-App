@@ -172,7 +172,7 @@ CHANNEL_LAYERS = {
 }
 
 CSRF_TRUSTED_ORIGINS = ['https://iniad-kapter.herokuapp.com']
-LOGIN_URL = 'login'
+# LOGIN_URL = 'login'
 # LOGIN_REDIRECT_URL = 'home'
 # LOGOUT_REDIRECT_URL = 'index'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
