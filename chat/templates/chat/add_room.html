@@ -1,5 +1,49 @@
+{% load static %}
 <!DOCTYPE html>
-<!-- chat/templates/chat/index.html -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/add_room.css'%}">
+    <title>Add Chat Room</title>
+</head>
+<body>
+    <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
+        <div class="card p-4">
+            <form action="{% url 'create_room' %}" method = "post">
+                {% csrf_token %}
+                <div class="header">
+                    <h3>Create a chat room</h3>
+                </div>
+                <div class="input">
+                    <input id="room-name-input" name = "room_name" type="text" placeholder="Enter chat room name" class="form-control input"/><br/>
+                </div>
+                <div class="row friend">
+                    {% for counter in friends %}
+                    <div class="col-8 p-2">
+                        <p class="name"> {{ counter }}</p>
+                    </div>
+                    <div class="col-4 p-2">
+                        <input type="checkbox" name="friends" class="float-right" id="{{ counter}}"  value="{{ counter }}"> 
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    <button id="room-name-submit" type="submit" class="btn btn-success">Create</button>
+                </div>
+                
+            </form>    
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+chat/templates/chat/index.html
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -19,5 +63,5 @@
         <button id="room-name-submit" type="submit">Submit</button>
     </form>
 </body>
-</html>
+</html> -->
 

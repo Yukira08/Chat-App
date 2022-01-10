@@ -1,0 +1,45 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friend</title>
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/friend.css'%}">
+</head>
+<body>
+    <div class="mt-4 mb-4 p-3 d-flex justify-content-center container">
+        <div class=" list-content">
+            <ul class="list-group">
+                <li href="#" class="list-group-item title">
+                    <h3>Friend List</h3>
+                </li>
+                {% for friend in friends %} 
+                <li href="#" class="list-group-item text-left">
+                    <img class="img-thumbnail" src="{{friend.cur_user.img}}">
+                    <label class="name">
+                        <a href="{% url 'profile' friend.cur_user.username %}">{{ friend.cur_user.username }}</a>  <br>
+                    </label>
+                    <label class="float-right">
+                        <!-- <a href="" class="btn btn-danger"><i class="fas fa-user-times fa-2x"></i></a> -->
+                        <a href="" class="icon btn btn-info"><i class="fas fa-envelope fa-2x"></i><span class="msg">Message</span></a>
+                    </label>
+                    <div class="break"></div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+    
+</body>
+</html>
+
+<!-- {% for friend in friends %} 
+<a href="{% url 'profile' friend.cur_user.username %}">{{ friend.cur_user.username }}</a> 
+<img src="{{friend.cur_user.img}}" alt="">
+{% endfor %} -->

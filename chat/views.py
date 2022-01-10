@@ -11,9 +11,10 @@ from django.core import serializers
 import json
 
 # Create your views here.
-
+@login_required
 def index(request):
-    return render(request, 'chat/index.html', {'friendnames':friendlist(request.user.username)})
+    recent_room=Message.objects.filter(sender=request.user).last().room.id
+    return redirect(room,room_id=recent_room)
 
 def error(request):
     return render(request, 'chat/error.html', {})
@@ -134,3 +135,8 @@ def read_noti(request, noti_id):
     else:
         return redirect(profile, notification.sender.username)
 
+def friend(request):
+    friends = Friendship.objects.filter(friends=request.user).all()
+    for friend in friends:
+        print(friend.cur_user.username)
+    return render(request,'chat/friend.html' ,{"friends":friends})
