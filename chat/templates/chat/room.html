@@ -129,6 +129,7 @@
 							<li><a href="{% url 'room' room_id=chat_room.id %}" style="color: white;">{{ chat_room.name }}</a></li>
 							{% endif %}
 							{% endfor %}
+                            <li><a id="test" goto="{{chat_rooms.0.id}}" style="color: white;">{{ chat_rooms.0.name }} TEST</a></li>
 						{% endif %}
 						</ul>
 					</div>
@@ -281,8 +282,26 @@
     <!-- <p>{{ user.id|json_script:"user_id" }}</p> -->
 </body>
 
-
+<li><a id="test" goto="119" style="color: white;">{{ chat_rooms.119.name }} TEST</a></li>
+						
 <script>
+    // ---test code start --- \\
+    $('#test').click(function(){
+        var x=$(this).attr("goto");
+        $.ajax({
+            url: "{% url 'checkajax'%}",
+            headers: {'X-CSRFToken': csrftoken},
+            data: {'room_id': x},
+            type: "GET",
+            dataType: 'json',
+            success: function(data){
+                
+                $('#test').text(data["msg"]);
+                $('#test').attr("goto",Number(x)+1+'');
+            }
+        })
+    })
+    // ---test code end--- \\
     var fi='';
     function init(){
         // console.log(JSON.parse(document.getElementById('hello-data').textContent));

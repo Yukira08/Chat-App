@@ -55,6 +55,12 @@ def room(request, room_id):
         'unread_num' : unread_num,
     })
 
+def checkajax(request):
+    room_id = request.GET.get('room_id')  
+    r=Room.objects.get(id=room_id)
+    mess=Message.objects.filter(room=r)[0]
+    return JsonResponse(data={"msg":mess.message}, status=200)
+
 
 
 @login_required
