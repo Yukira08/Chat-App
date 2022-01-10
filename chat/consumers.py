@@ -67,10 +67,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if name!=None:
             print("media root",str(settings.MEDIA_ROOT))
             print("media url",str(settings.MEDIA_URL))
-            location='upload/'+ str(a.room.id) 
+            location='upload/'+ str(a.room.id)+'/' 
             if not os.path.exists(str(settings.MEDIA_ROOT)+location):
                 os.makedirs(str(settings.MEDIA_ROOT)+location)
-            location += '/'+a.date.strftime("%Y%m%d%H%M%S%f")+name
+            location += a.date.strftime("%Y%m%d%H%M%S%f")+name
             a.path=str(settings.MEDIA_URL)+location
             data=bytes(list(binn.values()))
             f=open(str(settings.MEDIA_ROOT)+location,'wb+')
