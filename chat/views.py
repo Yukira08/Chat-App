@@ -140,3 +140,8 @@ def friend(request):
     for friend in friends:
         print(friend.cur_user.username)
     return render(request,'chat/friend.html' ,{"friends":friends})
+
+
+def friend_search(request, friendname):
+    friends = User.objects.filter(username__icontains=friendname)
+    return render(request,'chat/friend_search.html', {"friends":friends})

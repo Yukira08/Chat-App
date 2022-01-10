@@ -15,4 +15,5 @@ urlpatterns = [
     path('load_noti/', views.load_noti, name='load_noti'),
     path('read_noti/<int:noti_id>/', views.read_noti, name = 'read_noti'),
     path('friend',views.friend,name='friend'),
+    path('friend_search/<str:friendname>',views.friend_search,name='friend_search'),
 ]
