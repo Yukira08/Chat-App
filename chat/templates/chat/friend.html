@@ -1,4 +1,5 @@
 {% load static%}
+{% load bootstrap_icons %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,13 +26,13 @@
                         <a href="{% url 'profile' friend.cur_user.username %}">{{ friend.cur_user.username }}</a>  <br>
                     </label>
                     <label class="float-right">
-                        <a href="{% url 'unfriend' friend.cur_user.username %}" class="btn btn-danger"><i class="fas fa-user-times fa-2x"></i></a>
-                        <form action="{% url 'create_room' %}" method = "post">
+                        <a href="{% url 'unfriend' friend.cur_user.username %}" class="btn btn-danger">{% bs_icon 'person-x-fill'  size='2em' color='white'%}</a>
+                        <form style="display: inline;" action="{% url 'create_room' %}" method = "post">
                             {% csrf_token %}
                             <input class ="d-none" id="room_id" name="room_id" value="0">
                             <input class ="d-none" id="room-name-input" name="room_name" value="{{friend.cur_user.username}}{{user.username}}">
                             <input class ="d-none" name="friends" id="{{friend.cur_user.username}}" value = "{{friend.cur_user.username}}">
-                            <button type="submit" class="icon btn btn-info float-right"><i class="fas fa-envelope fa-2x"></i></button>
+                            <button type="submit" class="btn btn-info">{% bs_icon 'envelope-fill'  size='2em' color='white'%}</button>
                           </form>
                     </label>
                     <div class="break"></div>
