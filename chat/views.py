@@ -102,15 +102,20 @@ def create_room(request):
     if request.method=="POST":
         room_name = request.POST['room_name']
         friends = request.POST.getlist('friends')
-        if request.POST['room_id'] != 0:
+        # print(request.POST['room_id'])
+        #print("running")
+
+        if request.POST['room_id'] != '0':
             cur_room = Room.objects.get(id=request.POST['room_id'])
             cur_room.name = room_name
+            cur_room.participants.set([]) 
+            cur_room.participants.add(request.user)
             for friend in friends:
                 a = User.objects.get(username=friend)
                 cur_room.participants.add(a)
+                
             cur_room.save()
             return redirect(room, room_id=cur_room.id)
-
 
         #print(friends)
         # mutualroom=Room.objects.filter(participants__username__in=friends.append(request.user.username))\
@@ -176,13 +181,14 @@ def read_noti(request, noti_id):
     else:
         return redirect(profile, notification.sender.username)
 
+@login_required
 def friend(request):
     friends = Friendship.objects.filter(friends=request.user).all()
     for friend in friends:
         print(friend.cur_user.username)
     return render(request,'chat/friend.html' ,{"friends":friends})
 
-
+@login_required
 def friend_search(request, friendname):
     friends = User.objects.filter(username__icontains=friendname)
     return render(request,'chat/friend_search.html', {"friends":friends})
