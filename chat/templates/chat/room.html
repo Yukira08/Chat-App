@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
     <link rel="stylesheet" href="{% static 'css/chat.css'%}">
-    <link rel="stylesheet" href="{% static 'js/room.js'%}">
+    <!-- <link rel="stylesheet" href="{% static 'js/room.js'%}"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body onload="init()">
@@ -21,7 +21,7 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 		<link rel="stylesheet" href="{% static 'css/chat.css'%}">
-		<link rel="stylesheet" href="{% static 'js/room.js'%}">
+		<!-- <link rel="stylesheet" href="{% static 'js/room.js'%}"> -->
     </head>
 	<body>
 
@@ -74,38 +74,41 @@
 							<a class="nav-link" href="{% url 'friend'%}"><i class="fas fa-address-book fa-2x"></i></a>
 							</li>
 							<li class="nav-item">
-							<a class="nav-link" href="#"> <i class="fas fa-user-plus fa-2x"></i></a>
+							    <a class="nav-link" href="#"> <i class="fas fa-user-plus fa-2x"></i></a>
 							</li> 
                             <li class="nav-item dropdown">
-                            <a class="nav-link dropbtn notification" ><i class="fas fa-bell fa-2x "></i><span id="notibtn" class="badge">{{ unread_num }}</span></a>
-                            <div class="dropdown-content">
-                                {% if notifications %}
-                                {% for notification in  notifications %}
-                                  {% if notification.noti_type == 1 %}
-                                  {% if notification.unread %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
-                                  {% else %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>  
-                                  {% endif %}
-              
-                                  {% elif notification.noti_type == 2 %}
-                                  {% if notification.unread %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New friend request from {{ notification.sender }}</b></a></p>
-                                  {% else %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}">New friend request from {{ notification.sender }}</a></p>  
-                                  {% endif %}
-              
-                                  {% elif notification.noti_type == 3 %}
-                                  {% if notification.unread %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>request accepted by {{ notification.sender }}</b></a></p>
-                                  {% else %}
-                                  <p><a href="{% url 'read_noti' noti_id=notification.id %}"> request accepted by {{ notification.sender }}</a></p>  
-                                  {% endif %}
-                                  
-                                {% endif %}
-                                {% endfor %}
-                                {% endif %}
-                            </div>
+                                <a class="nav-link dropbtn notification" ><i class="fas fa-bell fa-2x "></i><span id="notibtn" class="badge">{{ unread_num }}</span></a>
+                                <div class="dropdown-content">
+                                    {% if notifications %}
+                                    {% for notification in  notifications %}
+                                    {% if notification.noti_type == 1 %}
+                                    {% if notification.unread %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New message from {{ notification.sender }}</b></a></p>
+                                    {% else %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}">New message from {{ notification.sender }}</a></p>  
+                                    {% endif %}
+                
+                                    {% elif notification.noti_type == 2 %}
+                                    {% if notification.unread %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>New friend request from {{ notification.sender }}</b></a></p>
+                                    {% else %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}">New friend request from {{ notification.sender }}</a></p>  
+                                    {% endif %}
+                
+                                    {% elif notification.noti_type == 3 %}
+                                    {% if notification.unread %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"><b>request accepted by {{ notification.sender }}</b></a></p>
+                                    {% else %}
+                                    <p><a href="{% url 'read_noti' noti_id=notification.id %}"> request accepted by {{ notification.sender }}</a></p>  
+                                    {% endif %}
+                                    
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </li>
+                            <li class="nav-link">
+                            <a href="#" class="nav-item"><i class="fas fa-sign-out-alt fa-2x"></i></a>
                             </li>
 						</ul>
 					</div>
@@ -145,15 +148,21 @@
                                 {% if chat_room.id != this_room %}
 								<div class="user_info">
 									<span>{{ chat_room.name }}</span>
-									<p>1767 Messages</p>
+									<!-- <p>1767 Messages</p> -->
 								</div>
                                 {% endif %}
-								<div class="video_cam">
+								<!-- <div class="video_cam">
 									<span><i class="fas fa-video"></i></span>
 									<span><i class="fas fa-phone"></i></span>
-								</div>
+								</div> -->
+                                <div class="input-group float-right">
+                                    <input type="text" placeholder="Search Conversation" name="" style="height: 50px !important;" class="search search_msg" id="search-input">
+                                    <div class="input-group-prepend">
+                                        <button class="input-group-text search_btn" style="height: 50px !important;" onclick= "window.submitFunction()"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
 							</div>
-							<span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+							<!-- <span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
 							<div class="action_menu">
 								<ul>
 									<li><i class="fas fa-user-circle"></i> View profile</li>
@@ -161,7 +170,8 @@
 									<li><i class="fas fa-plus"></i> Add to group</li>
 									<li><i class="fas fa-ban"></i> Block</li>
 								</ul>
-							</div>
+							</div> -->
+              
 						</div>
 						<div class="card-body msg_card_body">
                             <!------- messages ------->
@@ -253,8 +263,12 @@
     </div>
 
     <input id="search-input" type="text" placeholder="Search"/> -->
+<<<<<<< HEAD
     <button onclick= "window.submitFunction()">Submit</button>
 
+=======
+    <!-- <button onclick= "window.submitFunction()">Submit</button> -->
+>>>>>>> beanstalk
     <!-- {% csrf_token %}
 
     
@@ -321,7 +335,7 @@
         reader.readAsArrayBuffer(file);
     }
     var chatSocket = new WebSocket(
-        'wss://' + window.location.host + '/ws/chat/' + room_id + '/');
+        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
         // var prevmes = {{messages}};

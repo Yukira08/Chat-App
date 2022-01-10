@@ -105,6 +105,9 @@ html {
   color: white !important;
   cursor: pointer;
 }
+.search_msg{
+  float: right !important;
+}
 .contacts {
   list-style: none;
   padding: 0;
@@ -274,12 +277,12 @@ html {
   display: none;
 }
 
-
 /* Hide scrollbar for IE, Edge and Firefox */
-.msg_card_body {
+.msg_card_body{
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
 .messages-wrapper{
   height: 100%;
 }
