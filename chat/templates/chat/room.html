@@ -262,55 +262,10 @@
 		</div>
 	</body>
 </html>
-    <!-- <div>
-        <p>Friendlist</p>
-        {% if chat_rooms %}
-        <ul>
-          {% for chat_room in chat_rooms %}
-          {% if chat_room.id != this_room %}
-        <li><a href="{% url 'room' room_id=chat_room.id %}">{{ chat_room.name }}</a></li>
-        
-        {% endif %}
-        {% endfor %}
-        </ul>
-        {% else %}
-        <p> No chat room</p>
-        {% endif %}
-    </div>
 
-    <input id="search-input" type="text" placeholder="Search"/> -->
-    <!-- <button onclick= "window.submitFunction()">Submit</button> -->
-    <!-- {% csrf_token %}
-
-    
-    <form action="{% url 'message_search' room_id=this_room %}" method="post">
-        {% csrf_token %}
-        <label for="search_input">Your name: </label>
-        <input id="search_input" type="text" name="search_input" placeholder="search for messages in this room">
-        <input type="submit" value="Search">
-    </form> -->
-   
-    <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br/> -->
-    
-    <!-- {% csrf_token %}
-    {{form.media}}
-    {{form.short_text}}
-
-
-
-    <div id="test-file">
-
-
-    </div> -->
     
 </body>
-<!-- <li><a id="test" goto="119" style="color: white;">{{ chat_rooms.119.name }} TEST</a></li> -->
-<!-- <p>{{ user.id|json_script:"user_id" }}</p>	-->
-<!-- <p>This place</p> -->
 
-<!-- <div id="Send">
-    <input id="chat-message-submit" type="button" value="Send"/>
-</div> -->
 
 
 
@@ -331,7 +286,7 @@
             }
         })
     })
-    // ---test code end--- \\
+
     var fi='';
     function init(){
         // console.log(JSON.parse(document.getElementById('hello-data').textContent));
@@ -371,7 +326,7 @@
         reader.readAsArrayBuffer(file);
     }
     var chatSocket = new WebSocket(
-        'wss://' + window.location.host + '/ws/chat/' + room_id + '/');
+        'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
     chatSocket.onopen = function(){
         console.log("Connecting...");
         // var prevmes = {{messages}};
@@ -569,38 +524,38 @@
      return cookieValue;
       }
     var csrftoken = getCookie('csrftoken');
-//     setInterval(function(){ 
-//     $.ajax({
-//     url: "{% url 'load_noti'%}",
-//     headers: {'X-CSRFToken': csrftoken},
-//     data: {'signal': "send success"},
-//     type: "GET",
-//     dataType: 'json',
-//     success: function (data) {
-//         if (data) {
-//             var cur_time = new Date(Date.now() - 5000);
-//             document.getElementById("notibtn").innerHTML =  data["notification"].length;
+    setInterval(function(){ 
+    $.ajax({
+    url: "{% url 'load_noti'%}",
+    headers: {'X-CSRFToken': csrftoken},
+    data: {'signal': "send success"},
+    type: "GET",
+    dataType: 'json',
+    success: function (data) {
+        if (data) {
+            var cur_time = new Date(Date.now() - 5000);
+            document.getElementById("notibtn").innerHTML =  data["notification"].length;
 
-//             //console.log(document.getElementsByClassName("dropbtn").innerHTML);
-//             var ancestor =document.getElementsByClassName("dropdown-content");
-//             for(var i = 0; i < data["notification"].length; i++){
-//                 var noti_time = Date.parse(data["notification"][i].time); 
-//                 //console.log(noti_time);
-//                 if(noti_time > cur_time) {
-//                     //console.log("received"); 
-//                     var room_url = "{% url 'read_noti' 1234 %}".replace(/1234/, data["notification"][i].id );
-//                     //console.log(data["senders"][i]);
-//                     var sender = data["senders"][i];
-//                     //console.log(sender);
-//                     p = document.createElement("p");
-//                     p.innerHTML = "<a href=" + room_url + "><b>" + "New message from " + sender + "</b></a>";
-//                     ancestor[0].prepend(p);  
-//                 }
-//             }
-//         }
-//       }
-//     });
-//   }, 5000);
+            //console.log(document.getElementsByClassName("dropbtn").innerHTML);
+            var ancestor =document.getElementsByClassName("dropdown-content");
+            for(var i = 0; i < data["notification"].length; i++){
+                var noti_time = Date.parse(data["notification"][i].time); 
+                //console.log(noti_time);
+                if(noti_time > cur_time) {
+                    //console.log("received"); 
+                    var room_url = "{% url 'read_noti' 1234 %}".replace(/1234/, data["notification"][i].id );
+                    //console.log(data["senders"][i]);
+                    var sender = data["senders"][i];
+                    //console.log(sender);
+                    p = document.createElement("p");
+                    p.innerHTML = "<a href=" + room_url + "><b>" + "New message from " + sender + "</b></a>";
+                    ancestor[0].prepend(p);  
+                }
+            }
+        }
+      }
+    });
+  }, 5000);
     function userSearch(){
         var searchInput = document.getElementsByClassName("form-control search");
         //console.log(searchInput[0].value);
