@@ -59,6 +59,7 @@ def profile(request,username):
     print(inst.img.url)
     data['room_id'] = 0
     data['user']=inst
+    data['ruser']=request.user
     data['img_form']=img_form
     Friendship.objects.filter(friends=inst)
     data['offline_time'] = inst.offline_time

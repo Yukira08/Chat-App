@@ -88,7 +88,7 @@
           <form action="{% url 'create_room' %}" method = "post">
             {% csrf_token %}
             <input class ="d-none" id="room_id" name="room_id" value="{{room_id}}">
-            <input class ="d-none" id="room-name-input" name="room_name" value="{{user.username}}{{per}}">
+            <input class ="d-none" id="room-name-input" name="room_name" value="{{user.username}} and {{ruser.username}}">
             <input class ="d-none" name="friends" id="{{user.username}}" value = "{{user.username}}">
             <button type="submit" class="btn btn-secondary">Direct message</button>
           </form>
