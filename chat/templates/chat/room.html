@@ -323,6 +323,7 @@
             console.log("Sending:" , bytes);
         }
         reader.readAsArrayBuffer(file);
+
     }
     var chatSocket = new WebSocket(
         'ws://' + window.location.host + '/ws/chat/' + room_id + '/');
@@ -451,6 +452,7 @@
             console.log("File included: ",fi);
             var file = document.getElementById('filename').files[0];
             sendFile(file,message,room_id);
+            document.getElementById('filename').value='';
         }
         if(message!=''&&fi==''){
             chatSocket.send(JSON.stringify({'message': message, 'room_id' : room_id}));
