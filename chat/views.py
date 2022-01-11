@@ -60,6 +60,7 @@ def room(request, room_id):
         'messages' : mark_safe(json.dumps(messages)),
         'chat_rooms':available_room,
         'this_room' : room_id,
+        'room_name': a.name,
         'form': f,
         'messages' : Message.objects.filter(room = a),
         'notifications' : notifications,

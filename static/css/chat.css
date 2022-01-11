@@ -181,6 +181,7 @@ html {
 }
 .user_info span {
   font-size: 20px;
+  margin-right: 10px;
   color: white;
 }
 .user_info p {
