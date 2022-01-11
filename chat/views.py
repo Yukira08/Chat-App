@@ -13,18 +13,22 @@ from django.db.models import Count
 # Create your views here.
 @login_required
 def index(request):
-    try:
+    if Room.objects.filter(participants = request.user).count() ==0:
+        new_room = Room.objects.create(name = "Welcome " + request.user.username + " to Kapter!")
+        new_room.participants.add(request.user)
+        new_room.save()
+        return redirect(room,room_id=new_room.id)
+    else:
         recent_msg=Message.objects.filter(sender=request.user).order_by('-date')
         for msg in recent_msg:
             if request.user in msg.room.participants.all():
                 return redirect(room,room_id=msg.room.id)
         return_room = Room.objects.filter(participants = request.user)[0]
-        return redirect(room,room_id=return_room.room.id)
-    except:
-        new_room = Room.objects.create(name = "Welcome " + request.user.username + " to Kapter!")
-        new_room.participants.add(request.user)
-        new_room.save()
-        return redirect(room,room_id=new_room.id)
+        return redirect(room,room_id=return_room.id)
+
+
+
+
 
 
 def error(request):
