@@ -22,7 +22,7 @@
                 
                 {% for friend in friends %} 
                 <li href="#" class="list-group-item text-left">
-                    <img class="img-thumbnail" src="{{friend.img}}">
+                    <img class="img-thumbnail" src="{{friend.img.url}}">
                     <label class="name">
                         <a href="{% url 'profile' friend.username %}">{{ friend.username }}</a>  <br>
                     </label>
