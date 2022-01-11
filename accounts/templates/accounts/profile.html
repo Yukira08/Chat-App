@@ -30,6 +30,11 @@
       right: 1em;
       background-color: #b3b3b3;
     }
+    body{
+    background: #7f7fd5;
+    background: -webkit-linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
+    background: linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
+  }
   </style>
 </head>
 <body>
@@ -90,10 +95,10 @@
             <input class ="d-none" id="room_id" name="room_id" value="{{room_id}}">
             <input class ="d-none" id="room-name-input" name="room_name" value="{{user.username}} and {{ruser.username}}">
             <input class ="d-none" name="friends" id="{{user.username}}" value = "{{user.username}}">
-            <button type="submit" class="btn btn-secondary">Direct message</button>
+            <button type="submit" class="btn btn-success">{% bs_icon 'envelope-fill' size='2em' color='white'%}Message</button>
           </form>
-          <a href="{% url 'unfriend' friendname=user.username %}" class="btn btn-success">{% bs_icon 'person-plus-fill' size='2em' color='black'%} UnFriend</a>
-          <a class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} &nbsp;Friends</a>
+          <a href="{% url 'unfriend' friendname=user.username %}" class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} Friend</a>
+          <!-- <a class="btn btn-secondary">{% bs_icon 'person-check-fill' size='2em' color='black'%} &nbsp;Friends</a> -->
           {% endif %}
           {% endif %}
             <div class="d-flex flex-row justify-content-center align-items-center mt-3"> 
@@ -101,7 +106,7 @@
             </div>
             <div class="scrollmenu">
               {% if friendnames %}
-              <ul class="scroll">
+              <ul class="scroll" style="list-style: none;">
               {% for friendname in friendnames %}
                 <li><a href="{% url 'profile' username=friendname %}">{{ friendname }}</a></li>
               {% endfor %}
