@@ -22,7 +22,6 @@ $ redis-server
 
 -----
 
-This is a team project during my 2nd year of university and it is a web application to chat with friends and in groups, add, delete friends, view profile, and
-create groups.
-My role for the project is front-end development using Bootstrap and Django.
+This is a team project during my 2nd year of university and it is a web application to chat with friends and in groups, add, delete friends, view profile, and create groups.  
+My role for the project is front-end development using Bootstrap and Django.  
 Technology – HTML, CSS, JavaScript, Bootstrap, Django, Emoji Picker
